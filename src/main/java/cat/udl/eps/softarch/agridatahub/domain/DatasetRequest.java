@@ -9,15 +9,15 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.ZonedDateTime;
 
-@EqualsAndHashCode(callSuper = true)
+
 @Entity
 @Data
 @NoArgsConstructor
-public class DatasetRequest extends UriEntity<Integer> {
+public class DatasetRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Long id;
 
     @NotBlank
     @Column
