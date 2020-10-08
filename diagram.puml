@@ -1,0 +1,48 @@
+@startuml
+skinparam dpi 200
+skinparam classAttributeFontSize 8
+skinparam classArrowFontSize 9
+skinparam classFontSize 10
+skinparam nodesep 50
+skinparam ranksep 30
+hide stereotype
+skinparam class {
+    BackgroundColor White
+    BackgroundColor<<User>> LightBlue
+    BackgroundColor<<Dataset>> LightGreen
+    BackgroundColor<<Request>> LightPink
+    BackgroundColor<<DatasetRequest>> LightYellow
+}
+
+
+abstract class User <<User>> {
+    String username, password, email
+}
+
+class Reuser <<User>> extends User {
+}
+
+class Provider <<User>> extends User {
+}
+
+abstract class Dataset <<Dataset>> {
+    String name
+}
+
+class Request <<Request>> {
+    Date creationDate
+}
+
+class DatasetRequest <<DatasetRequest>> {
+    boolean granted
+}
+
+Provider "1" -- "*" Dataset:providedBy <
+
+Reuser "1" -- "*" Request:requestedBy <
+
+Request "1" -- "*" DatasetRequest:requestedIn <
+
+Dataset "1" -- "*" DatasetRequest:requestOf <
+
+@enduml
