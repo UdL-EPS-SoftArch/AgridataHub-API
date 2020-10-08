@@ -10,3 +10,10 @@ Feature: Register Provider
     Then The response code is 201
     And It has been created a provider with username "provider" and email "provider@example.com", the password is not returned
     And I can login with username "provider" and password "password"
+
+  Scenario: Register existing provider username
+    Given There is a registered provider with username "provider" and password "existing" and email "existing@example.com"
+    And I'm not logged in
+    When I register a new provider with username "provider", email "provider@example.com" and password "password"
+    Then The response code is 409
+    And I cannot login with username "provider" and password "password"
