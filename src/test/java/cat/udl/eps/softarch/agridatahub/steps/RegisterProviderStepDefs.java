@@ -1,6 +1,7 @@
 package cat.udl.eps.softarch.agridatahub.steps;
 
 import cat.udl.eps.softarch.agridatahub.domain.Provider;
+import cat.udl.eps.softarch.agridatahub.domain.User;
 import cat.udl.eps.softarch.agridatahub.repository.ProviderRepository;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -26,10 +27,10 @@ public class RegisterProviderStepDefs {
     }
 
     @Given("There is no registered provider with username {string}")
-    public void thereIsNoRegisteredProviderWithUsername(String provider) {
+    public void thereIsNoRegisteredProviderWithUsername(String username) {
         Assert.assertFalse("Provider \""
-                        +  provider + "\"shouldn't exist",
-                providerRepository.existsById(provider));
+                        +  username + "\"shouldn't exist",
+                providerRepository.existsById(username));
     }
 
     @When("I register a new provider with username {string}, email {string} and password {string}")
@@ -58,5 +59,17 @@ public class RegisterProviderStepDefs {
                 .andDo(print())
                 .andExpect(jsonPath("$.email", is(email)))
                 .andExpect(jsonPath("$.password").doesNotExist());
+    }
+
+    @Given("There is a registered provider with username {string} and password {string} and email {string}")
+    public void thereIsARegisteredProviderWithUsernameAndPasswordAndEmail(String username, String password, String email) {
+        if (!providerRepository.existsById(username)) {
+            Provider provider = new Provider();
+            provider.setEmail(email);
+            provider.setUsername(username);
+            provider.setPassword(password);
+            provider.encodePassword();
+            providerRepository.save(provider);
+        }
     }
 }
