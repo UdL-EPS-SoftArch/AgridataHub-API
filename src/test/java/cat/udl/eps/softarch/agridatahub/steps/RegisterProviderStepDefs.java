@@ -72,4 +72,13 @@ public class RegisterProviderStepDefs {
             providerRepository.save(provider);
         }
     }
+
+    @And("It has not been created a provider with username {string}")
+    public void itHasNotBeenCreatedAProviderWithUsername(String username) throws Throwable {
+        stepDefs.result = stepDefs.mockMvc.perform(
+                get("/providers/{username}", username)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .with(AuthenticationStepDefs.authenticate()))
+                .andExpect(status().isNotFound());
+    }
 }
