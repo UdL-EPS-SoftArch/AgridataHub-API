@@ -17,3 +17,9 @@ Feature: Register Provider
     When I register a new provider with username "provider", email "provider@example.com" and password "password"
     Then The response code is 409
     And I cannot login with username "provider" and password "password"
+
+  Scenario: Register provider when already authenticated
+    Given I login as "demo" with password "password"
+    When I register a new provider with username "provider", email "provider@example.com" and password "password"
+    Then The response code is 403
+    And It has not been created a provider with username "provider"
