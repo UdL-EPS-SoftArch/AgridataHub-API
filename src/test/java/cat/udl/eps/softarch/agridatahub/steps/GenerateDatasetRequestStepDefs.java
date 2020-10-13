@@ -5,6 +5,7 @@ import cat.udl.eps.softarch.agridatahub.repository.UserRepository;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
+import org.json.JSONObject;
 import org.junit.Assert;
 
 import static org.hamcrest.Matchers.is;
@@ -28,28 +29,24 @@ public class GenerateDatasetRequestStepDefs {
 
     @Given("There is registered user with username \"([^\"]*)\"$")
     public void thereIsRegisteredUserWithUsername(String user) {
-        Assert.assertFalse("user \""
-                        +  user + "\"shouldn't exist",
+        Assert.assertTrue("user \""
+                        +  user + "\"should exit",
                 userRepository.existsById(user));
     }
 
     @When("I create a new DatasetRequest with value {string}")
-    public void iCreateANewDatasetRequestWithValue(String arg0) {
+    public void iCreateANewDatasetRequestWithValue(Long id) {
 
+        Assert.assertFalse("DatasetRequest shouldn'l exit",
+                datasetRequestRepository.existsById(id));
 
-    }
-
-    @And("I create a new Request with value {string}")
-    public void iCreateANewRequestWithValue(String arg0) {
-
-    }
-
-    @And("I create a new Dataset with name {string}")
-    public void iCreateANewDatasetWithName(String arg0) {
     }
 
     @And("It has been created a new DatasetRequest with value {string}")
-    public void itHasBeenCreatedANewDatasetRequestWithValue(String arg0) {
+    public void itHasBeenCreatedANewDatasetRequestWithValue(Long id) {
+        JSONObject DatasetRequest = new JSONObject();
+        Assert.assertTrue("DatasetRequest should exit",
+                datasetRequestRepository.existsById(id));
     }
 
 
