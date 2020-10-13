@@ -1,5 +1,6 @@
 package cat.udl.eps.softarch.agridatahub.steps;
 
+import cat.udl.eps.softarch.agridatahub.domain.DatasetRequest;
 import cat.udl.eps.softarch.agridatahub.repository.DatasetRequestRepository;
 import cat.udl.eps.softarch.agridatahub.repository.UserRepository;
 import io.cucumber.java.en.And;
@@ -37,6 +38,8 @@ public class GenerateDatasetRequestStepDefs {
     @When("I create a new DatasetRequest with value {string}")
     public void iCreateANewDatasetRequestWithValue(Long id) {
 
+        DatasetRequest DatasetRequest = new DatasetRequest();
+        DatasetRequest.setId(id);
         Assert.assertFalse("DatasetRequest shouldn'l exit",
                 datasetRequestRepository.existsById(id));
 
@@ -44,7 +47,7 @@ public class GenerateDatasetRequestStepDefs {
 
     @And("It has been created a new DatasetRequest with value {string}")
     public void itHasBeenCreatedANewDatasetRequestWithValue(Long id) {
-        JSONObject DatasetRequest = new JSONObject();
+
         Assert.assertTrue("DatasetRequest should exit",
                 datasetRequestRepository.existsById(id));
     }
