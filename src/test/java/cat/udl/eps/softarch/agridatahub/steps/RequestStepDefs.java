@@ -4,12 +4,17 @@ import cat.udl.eps.softarch.agridatahub.domain.Request;
 
 import cat.udl.eps.softarch.agridatahub.repository.RequestRepository;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.springframework.http.MediaType;
 
 import java.util.Date;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 
 public class RequestStepDefs {
@@ -23,33 +28,26 @@ public class RequestStepDefs {
 
 
     @When("I create a new request for a Dataset")
-    public void iCreateANewRequestForADataset() {
+    public void iCreateANewRequestForADataset() throws Throwable {
 
         Date date = new Date();
         Request request = new Request();
         request.setCreationDate(date);
-    }
+        stepDefs.result = stepDefs.mockMvc.perform(
+                post("/requests")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content(stepDefs.mapper.writeValueAsString(request))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
 
-    @Then("the response code is {int}")
-    public void theResponseCodeIs(int result) {
     }
 
     @Given("There is no created requests by user with username {string}")
-    public void thereIsNoCreatedRequestsByUserWithUsername(String username) {
-
+    public void thereIsNoCreatedRequestsByUserWithUsername(String arg0) {
     }
 
     @And("There is a registered user with username {string}")
-    public void thereIsARegisteredUserWithUsername(String username) {
-
-    }
-
-    @And("No DatasetRequests with id {int}")
-    public void noDatasetRequestsWithId(int arg0) {
-        
-    }
-
-    @When("I create a Request for a datasetRequest with id {int}")
-    public void iCreateARequestForADatasetRequestWithId(int arg0) {
+    public void thereIsARegisteredUserWithUsername(String arg0) {
     }
 }
