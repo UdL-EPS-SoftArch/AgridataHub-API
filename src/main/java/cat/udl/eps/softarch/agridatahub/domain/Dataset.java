@@ -20,7 +20,6 @@ public class Dataset extends UriEntity<Long> {
     @NotBlank
     private String title;
 
-    @NotBlank
     private String description;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
