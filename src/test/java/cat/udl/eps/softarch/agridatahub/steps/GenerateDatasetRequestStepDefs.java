@@ -30,13 +30,6 @@ public class GenerateDatasetRequestStepDefs {
     }
 
 
-    @Given("There is registered user with username \"([^\"]*)\"$")
-    public void thereIsRegisteredUserWithUsername(String user) {
-        Assert.assertTrue("user \""
-                        + user + "\"should exit",
-                userRepository.existsById(user));
-    }
-
     @When("I create a new DatasetRequest with status value {string}")
     public void iCreateANewDatasetRequestWithValueAndBoolean(String granted) throws Throwable {
 
