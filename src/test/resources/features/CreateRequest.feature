@@ -7,4 +7,4 @@ Feature: Create Request
     Given I login as "demo" with password "password"
     When  I create a new request with description "primera request"
     Then The response code is 201
-    And It has been created a new Request
+    And It has been created a new Request with description "primera request"

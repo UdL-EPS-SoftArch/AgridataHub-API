@@ -9,13 +9,17 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.junit.Assert;
 import org.springframework.http.MediaType;
+import org.json.JSONObject;
 
 import java.util.Date;
 
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class RequestStepDefs {
@@ -28,19 +32,6 @@ public class RequestStepDefs {
         this.requestRepository = requestRepository;
     }
 
-
-    @And("It has been created a new Request")
-    public void itHasBeenCreatedANewRequest() throws Throwable {
-
-        newResourceUri = stepDefs.result.andReturn().getResponse().getHeader("Location");
-        stepDefs.result = stepDefs.mockMvc.perform(
-
-          get(newResourceUri)
-                .accept(MediaType.APPLICATION_JSON)
-                .with(AuthenticationStepDefs.authenticate()))
-            .andExpect(status().isOk());
-
-    }
 
     @When("I create a new request with description {string}")
     public void iCreateANewRequestWithDescription(String description) throws Throwable{
@@ -56,6 +47,20 @@ public class RequestStepDefs {
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
+
+    }
+
+    @And("It has been created a new Request with description {string}")
+    public void itHasBeenCreatedANewRequestWithDescription(String description) throws Throwable{
+
+        newResourceUri = stepDefs.result.andReturn().getResponse().getHeader("Location");
+        stepDefs.result = stepDefs.mockMvc.perform(
+
+                get(newResourceUri)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.description", is(description)));
 
     }
 }
