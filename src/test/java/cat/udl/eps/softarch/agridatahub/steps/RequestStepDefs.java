@@ -15,11 +15,13 @@ import java.util.Date;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class RequestStepDefs {
     final StepDefs stepDefs;
     final RequestRepository requestRepository;
+    private String newResourceUri;
 
     RequestStepDefs(StepDefs stepDefs, RequestRepository requestRepository) {
         this.stepDefs = stepDefs;
@@ -27,12 +29,26 @@ public class RequestStepDefs {
     }
 
 
-    @When("I create a new request for a Dataset")
-    public void iCreateANewRequestForADataset() throws Throwable {
+    @And("It has been created a new Request")
+    public void itHasBeenCreatedANewRequest() throws Throwable {
+
+        newResourceUri = stepDefs.result.andReturn().getResponse().getHeader("Location");
+        stepDefs.result = stepDefs.mockMvc.perform(
+
+          get(newResourceUri)
+                .accept(MediaType.APPLICATION_JSON)
+                .with(AuthenticationStepDefs.authenticate()))
+            .andExpect(status().isOk());
+
+    }
+
+    @When("I create a new request with description {string}")
+    public void iCreateANewRequestWithDescription(String description) throws Throwable{
 
         Date date = new Date();
         Request request = new Request();
         request.setCreationDate(date);
+        request.setDescription(description);
         stepDefs.result = stepDefs.mockMvc.perform(
                 post("/requests")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -41,13 +57,5 @@ public class RequestStepDefs {
                         .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
 
-    }
-
-    @Given("There is no created requests by user with username {string}")
-    public void thereIsNoCreatedRequestsByUserWithUsername(String arg0) {
-    }
-
-    @And("There is a registered user with username {string}")
-    public void thereIsARegisteredUserWithUsername(String arg0) {
     }
 }

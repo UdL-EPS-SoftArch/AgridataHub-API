@@ -7,9 +7,12 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+
 @RepositoryRestResource
 public interface RequestRepository extends PagingAndSortingRepository<Request, Long> {
 
-    Request findByRequestId(Long id);
+    Optional<Request> findById(Long id);
     List<Request> findRequestByCreationDate(@Param("creationDate") Date date);
+    List<Request> findRequestByDescription(@Param("description") String description);
 }
