@@ -1,24 +1,23 @@
 package cat.udl.eps.softarch.agridatahub.domain;
 
 
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Data;
-import javax.validation.constraints.NotBlank;
 
 import javax.persistence.*;
 
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
 @NoArgsConstructor
-public class DatasetRequest {
+public class DatasetRequest extends UriEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NotBlank
-    @Column
     private boolean granted = false;
 
 }

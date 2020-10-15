@@ -15,6 +15,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class GenerateDatasetRequestStepDefs {
 
@@ -36,26 +37,30 @@ public class GenerateDatasetRequestStepDefs {
                 userRepository.existsById(user));
     }
 
-    @When("I create a new DatasetRequest with value {string} and boolean {string}")
-    public void iCreateANewDatasetRequestWithValueAndBoolean(Long id, Boolean granted) throws Throwable {
+    @When("I create a new DatasetRequest with status value {string}")
+    public void iCreateANewDatasetRequestWithValueAndBoolean(String granted) throws Throwable {
 
-        DatasetRequest DatasetRequest = new DatasetRequest();
-        DatasetRequest.setId(id);
-        DatasetRequest.setGranted(granted);
+        DatasetRequest datasetRequest = new DatasetRequest();
+        datasetRequest.setGranted(Boolean.parseBoolean(granted));
 
         stepDefs.result = stepDefs.mockMvc.perform(
-                post("/DatasetRequest")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(DatasetRequest.toString())
+                post("/datasetRequests")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content(stepDefs.mapper.writeValueAsString(datasetRequest))
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
                     .andDo(print());
     }
 
-    @And("It has been created a new DatasetRequest with value {string}")
-    public void itHasBeenCreatedANewDatasetRequestWithValueAndBoolean(Long id) {
-        Assert.assertTrue("DatasetRequest should exit ",
-                datasetRequestRepository.existsById(id));
+    @And("It has been created a new DatasetRequest")
+    public void itHasBeenCreatedANewDatasetRequestWithValueAndBoolean() throws Exception {
+        String id = stepDefs.result.andReturn().getResponse().getHeader("Location");
+        stepDefs.result = stepDefs.mockMvc.perform(
+                get(id)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 }
 

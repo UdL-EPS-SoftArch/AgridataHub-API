@@ -17,5 +17,5 @@ public interface DatasetRequestRepository extends PagingAndSortingRepository<Dat
      * https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.query-creation
      */
 
-    List<DatasetRequest> findDatasetRequestBy(@Param("text") String text);
+    List<DatasetRequest> findDatasetRequestById(@Param("id") Long id);
 }
