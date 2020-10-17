@@ -7,7 +7,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.springframework.http.MediaType;
@@ -21,21 +20,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class RegisterReuserStepDefs {
     final StepDefs stepDefs;
-    final ReuserRepository RegisterReuserStepDefs;
+    final ReuserRepository reuserRepository;
 
-    RegisterReuserStepDefs(StepDefs stepDefs, ReuserRepository RegisterReuserStepDefs) {
+    RegisterReuserStepDefs(StepDefs stepDefs, ReuserRepository reuserRepository) {
         this.stepDefs = stepDefs;
-        this.RegisterReuserStepDefs = RegisterReuserStepDefs;
+        this.reuserRepository = reuserRepository;
     }
 
-    @Given("There is no registered Reuser with username {string}")
+    @Given("There is no registered reuser with username {string}")
     public void thereIsNoRegisteredReuserWithUsername(String username) {
         Assert.assertFalse("Reuser \""
                         +  username + "\"shouldn't exist",
-                ReuserRepository.existsById(username));
+                reuserRepository.findByUsernameContaining(username).isEmpty());
     }
 
-    @When("I register a new Reuser with username \"([^\\\"]*)\", email \"([^\\\"]*)\" and password \"([^\\\"]*)\\\"$\"")
+    @When("I register a new reuser with username {string}, email {string} and password {string}")
     public void iRegisterANewReuserWithUsernameEmailAndPassword(String username, String email, String password)
             throws Throwable{
         Reuser reuser = new Reuser();
@@ -54,9 +53,8 @@ public class RegisterReuserStepDefs {
 
     }
 
-    @And("It has been created a Reuser with username \"([^\\\"]*)\" and email \"([^\\\"]*)\", the password is not returned")
-    public void itHasBeenCreatedAReuserWithUsernameAndEmailThePasswordIsNotReturned(String username, String email)
-            throws Throwable {
+    @And("It has been created a reuser with username {string} and email {string}, the password is not returned")
+    public void itHasBeenCreatedAReuserWithUsername(String username, String email) throws Throwable{
         stepDefs.result = stepDefs.mockMvc.perform(
                 get("/reusers/{username}", username)
                         .accept(MediaType.APPLICATION_JSON)
@@ -66,21 +64,25 @@ public class RegisterReuserStepDefs {
                 .andExpect(jsonPath("$.password").doesNotExist());
     }
 
-
-    @When("I register a new Reuser with username, email and password")
-    public void iRegisterANewReuserWithUsernameAndPassword(String username, String email, String password) throws Throwable {
-        Reuser reuser = new Reuser();
-        reuser.setUsername(username);
-        reuser.setEmail(email);
-
+    @Given("There is a registered reuser with username {string} and password {string} and email {string}")
+    public void thereIsARegisteredReuserWithUsernameAndPasswordAndEmail(String username, String password, String email) {
+        if (!reuserRepository.findByUsernameContaining(username).isEmpty()) {
+            Reuser reuser = new Reuser();
+            reuser.setEmail(email);
+            reuser.setUsername(username);
+            reuser.setPassword(password);
+            reuser.encodePassword();
+            reuserRepository.save(reuser);
+        }
+    }
+    @And("It has not been created a reuser with username {string}")
+    public void itHasNotBeenCreatedAReuserWithUsername(String username) throws Throwable {
         stepDefs.result = stepDefs.mockMvc.perform(
-                post("/reusers")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(new JSONObject(
-                                stepDefs.mapper.writeValueAsString(reuser)
-                        ).put("password", password).toString())
+                get("/reusers/{username}", username)
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
-                .andDo(print());
+                .andExpect(status().isNotFound());
     }
+
+
 }

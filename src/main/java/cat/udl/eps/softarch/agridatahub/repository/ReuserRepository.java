@@ -1,7 +1,15 @@
 package cat.udl.eps.softarch.agridatahub.repository;
 
-public interface ReuserRepository {
-    static boolean existsById(String username) {
-        return true;
-    }
+import cat.udl.eps.softarch.agridatahub.domain.Reuser;
+import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+
+import java.util.List;
+
+@RepositoryRestResource
+public interface ReuserRepository extends PagingAndSortingRepository<Reuser, Long> {
+
+
+    List<Reuser> findByUsernameContaining(@Param("text") String text);
 }
