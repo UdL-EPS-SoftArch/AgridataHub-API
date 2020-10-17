@@ -16,7 +16,7 @@ public class DeleteProviderHandler {
     final Logger logger = LoggerFactory.getLogger(Provider.class);
 
     @HandleBeforeDelete
-    public void handleProviderPreDelete(Provider provider) throws Throwable {
+    public void handleProviderPreDelete(Provider provider) {
         logger.info("Before delete: {}", provider.toString());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         logger.info("Username: {}", authentication.getAuthorities());
