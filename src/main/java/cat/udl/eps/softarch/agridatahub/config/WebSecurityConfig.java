@@ -32,6 +32,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
                     .antMatchers(HttpMethod.POST, "/providers").anonymous()
                     .antMatchers(HttpMethod.DELETE, "/providers/*").hasRole("PROVIDER")
+                    .antMatchers(HttpMethod.PATCH, "/providers/*").hasRole("PROVIDER")
 
                     .antMatchers(HttpMethod.POST, "/**/*").authenticated()
                     .antMatchers(HttpMethod.PUT, "/**/*").authenticated()
