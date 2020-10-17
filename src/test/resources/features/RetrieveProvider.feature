@@ -6,7 +6,7 @@ Feature: Retrieve Provider
   Scenario: List all providers
     Given There is a registered provider with username "provider1" and password "password" and email "prov1@gmail.com"
     And There is a registered provider with username "provider2" and password "password" and email "prov2@gmail.com"
-    And I login as "provider1" with password "password"
+    And I login as "demo" with password "password"
     When I list all the existing providers in the app
     Then The response code is 200
     And There has been retrieved 2 providers
@@ -20,4 +20,21 @@ Feature: Retrieve Provider
   Scenario: List providers list when not authenticated
     Given There is a registered provider with username "provider" and password "password" and email "prov@gmail.com"
     When I list all the existing providers in the app
+    Then The response code is 401
+
+  Scenario: Get an existing provider
+    Given There is a registered provider with username "provider" and password "password" and email "prov@gmail.com"
+    And I login as "demo" with password "password"
+    When I request the provider with username "provider"
+    Then The response code is 200
+    And It has been received the provider with username "provider"
+
+  Scenario: Get a non existing provider
+    Given I login as "demo" with password "password"
+    When I request the provider with username "provider"
+    Then The response code is 404
+
+  Scenario: Get an existing provider when not authenticated
+    Given There is a registered provider with username "provider" and password "password" and email "prov@gmail.com"
+    When I request the provider with username "provider"
     Then The response code is 401
