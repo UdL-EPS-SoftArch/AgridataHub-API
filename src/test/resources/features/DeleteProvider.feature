@@ -8,7 +8,6 @@ Feature: Delete Provider
     And I login as "provider" with password "password"
     When I delete the provider with username "provider"
     Then The response code is 204
-    And I login as "demo" with password "password"
     And It does not exist a provider with username "provider"
 
   Scenario: Provider deletes a not owned account
@@ -23,7 +22,6 @@ Feature: Delete Provider
     Given There is a registered provider with username "provider" and password "password" and email "prov@gmail.com"
     When I delete the provider with username "provider"
     Then The response code is 401
-    And I login as "provider" with password "password"
     And It has not been deleted a provider with username "provider"
 
   Scenario: Delete a provider that does not exist

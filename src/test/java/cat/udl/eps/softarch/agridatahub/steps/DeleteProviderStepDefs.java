@@ -35,8 +35,7 @@ public class DeleteProviderStepDefs {
     public void itDoesNotExistAProviderWithUsername(String username) throws Throwable {
         stepDefs.result = stepDefs.mockMvc.perform(
                 get("/providers/{username}", username)
-                    .accept(MediaType.APPLICATION_JSON_UTF8)
-                    .with(AuthenticationStepDefs.authenticate()))
+                    .accept(MediaType.APPLICATION_JSON_UTF8))
                           .andDo(print())
                           .andExpect(status().isNotFound());
     }
@@ -45,8 +44,7 @@ public class DeleteProviderStepDefs {
     public void itHasNotBeenDeletedAProviderWithUsername(String username) throws Throwable {
         stepDefs.result = stepDefs.mockMvc.perform(
                 get("/providers/{username}", username)
-                    .accept(MediaType.APPLICATION_JSON)
-                    .with(AuthenticationStepDefs.authenticate()))
+                    .accept(MediaType.APPLICATION_JSON))
                           .andDo(print())
                           .andExpect(jsonPath("$.id", is(username)));
     }
