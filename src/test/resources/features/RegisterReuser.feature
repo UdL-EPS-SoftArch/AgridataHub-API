@@ -14,5 +14,5 @@ Feature: Register Reuser
     Given There is a registered reuser with username "reuser" and password "existing" and email "existing@example.com"
     And I'm not logged in
     When I register a new reuser with username "reuser", email "reuser@example.com" and password "password"
-    Then The response code is 401
+    Then The response code is 409
     And I cannot login with username "reuser" and password "password"
