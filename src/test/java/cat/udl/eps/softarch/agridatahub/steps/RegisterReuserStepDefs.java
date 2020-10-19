@@ -3,7 +3,6 @@ package cat.udl.eps.softarch.agridatahub.steps;
 import cat.udl.eps.softarch.agridatahub.domain.Reuser;
 import cat.udl.eps.softarch.agridatahub.domain.User;
 import cat.udl.eps.softarch.agridatahub.repository.ReuserRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
@@ -29,7 +28,7 @@ public class RegisterReuserStepDefs {
 
     @Given("There is no registered reuser with username {string}")
     public void thereIsNoRegisteredReuserWithUsername(String username) {
-        Assert.assertFalse("Reuser \""
+        Assert.assertTrue("Reuser \""
                         +  username + "\"shouldn't exist",
                 reuserRepository.findByUsernameContaining(username).isEmpty());
     }
