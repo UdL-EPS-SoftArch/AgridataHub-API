@@ -24,7 +24,7 @@ public class Dataset extends UriEntity<Long> {
     @Length(min = 1, max = 80)
     private String title;
 
-    @Length(min = 1, max = 256)
+    @Length(max = 256)
     private String description;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
