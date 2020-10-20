@@ -31,7 +31,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/users").anonymous()
                 .antMatchers(HttpMethod.POST, "/users/*").denyAll()
                 .antMatchers(HttpMethod.POST, "/reusers").anonymous()
-
+                    .antMatchers(HttpMethod.DELETE, "/providers/*").hasRole("PROVIDER")
+                    .antMatchers(HttpMethod.PATCH, "/providers/*").hasRole("PROVIDER")
+                    .antMatchers(HttpMethod.POST, "/providers").anonymous()
                 .antMatchers(HttpMethod.POST, "/**/*").authenticated()
                 .antMatchers(HttpMethod.PUT, "/**/*").authenticated()
                 .antMatchers(HttpMethod.PATCH, "/**/*").authenticated()
@@ -46,20 +48,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable();
     }
 
-    @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(Arrays.asList(allowedOrigins));
-        corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        corsConfiguration.setAllowedHeaders(Collections.singletonList("*"));
-        corsConfiguration.setAllowCredentials(true);
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", corsConfiguration);
-        return source;
-    }
+        @Bean
+        CorsConfigurationSource corsConfigurationSource() {
+            CorsConfiguration corsConfiguration = new CorsConfiguration();
+            corsConfiguration.setAllowedOrigins(Arrays.asList(allowedOrigins));
+            corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+            corsConfiguration.setAllowedHeaders(Arrays.asList("*"));
+            corsConfiguration.setAllowCredentials(true);
+            UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+            source.registerCorsConfiguration("/**", corsConfiguration);
+            return source;
+        }
 
     @Bean
     public SecurityEvaluationContextExtension securityEvaluationContextExtension() {
         return new SecurityEvaluationContextExtension();
     }
 }
+
+
