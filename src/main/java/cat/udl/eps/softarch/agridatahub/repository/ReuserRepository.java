@@ -8,8 +8,6 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import java.util.List;
 
 @RepositoryRestResource
-public interface ReuserRepository extends PagingAndSortingRepository<Reuser, Long> {
-
-
+public interface ReuserRepository extends PagingAndSortingRepository<Reuser, String> {
     List<Reuser> findByUsernameContaining(@Param("text") String text);
 }

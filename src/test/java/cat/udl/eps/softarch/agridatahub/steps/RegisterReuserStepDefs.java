@@ -33,7 +33,7 @@ public class RegisterReuserStepDefs {
                 reuserRepository.findByUsernameContaining(username).isEmpty());
     }
 
-    @When("I register a new reuser with username {string}, email {string} and password {string}")
+    @When("^I register a new reuser with username \"([^\"]*)\", email \"([^\"]*)\" and password \"([^\"]*)\"$")
     public void iRegisterANewReuserWithUsernameEmailAndPassword(String username, String email, String password)
             throws Throwable{
         Reuser reuser = new Reuser();
@@ -52,7 +52,7 @@ public class RegisterReuserStepDefs {
 
     }
 
-    @And("It has been created a reuser with username {string} and email {string}, the password is not returned")
+    @And("It has been created a reuser with username \"([^\"]*)\" and email \"([^\"]*)\", the password is not returned$")
     public void itHasBeenCreatedAReuserWithUsername(String username, String email) throws Throwable{
         stepDefs.result = stepDefs.mockMvc.perform(
                 get("/reusers/{username}", username)
@@ -65,7 +65,7 @@ public class RegisterReuserStepDefs {
 
     @Given("There is a registered reuser with username {string} and password {string} and email {string}")
     public void thereIsARegisteredReuserWithUsernameAndPasswordAndEmail(String username, String password, String email) {
-        if (!reuserRepository.findByUsernameContaining(username).isEmpty()) {
+        if (reuserRepository.findByUsernameContaining(username).isEmpty()) {
             Reuser reuser = new Reuser();
             reuser.setEmail(email);
             reuser.setUsername(username);
