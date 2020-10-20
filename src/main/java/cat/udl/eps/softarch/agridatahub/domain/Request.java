@@ -18,5 +18,8 @@ public class Request {
     @Temporal(TemporalType.DATE)
     private Date creationDate;
 
+    @Column(length = 500, unique = false)
+    private String description;
+
     //S'ha d'enllaçar amb una instancia de Reuser i DatasetRequest
 }
