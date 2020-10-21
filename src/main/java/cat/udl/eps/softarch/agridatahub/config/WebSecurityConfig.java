@@ -1,7 +1,6 @@
 package cat.udl.eps.softarch.agridatahub.config;
 
 import java.util.Arrays;
-import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -31,9 +30,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/users").anonymous()
                 .antMatchers(HttpMethod.POST, "/users/*").denyAll()
                 .antMatchers(HttpMethod.POST, "/reusers").anonymous()
-                    .antMatchers(HttpMethod.DELETE, "/providers/*").hasRole("PROVIDER")
-                    .antMatchers(HttpMethod.PATCH, "/providers/*").hasRole("PROVIDER")
-                    .antMatchers(HttpMethod.POST, "/providers").anonymous()
+                .antMatchers(HttpMethod.DELETE, "/providers/*").hasRole("PROVIDER")
+                .antMatchers(HttpMethod.PATCH, "/providers/*").hasRole("PROVIDER")
+                .antMatchers(HttpMethod.POST, "/providers").anonymous()
+                .antMatchers(HttpMethod.POST, "/datasets").hasRole("PROVIDER")
                 .antMatchers(HttpMethod.POST, "/**/*").authenticated()
                 .antMatchers(HttpMethod.PUT, "/**/*").authenticated()
                 .antMatchers(HttpMethod.PATCH, "/**/*").authenticated()
