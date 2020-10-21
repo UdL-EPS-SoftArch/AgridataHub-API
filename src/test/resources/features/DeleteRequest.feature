@@ -13,7 +13,8 @@ Feature: Delete Request
 
   Scenario: Delete Request when when not authenticated
     Given There is a registered user with username "demo" and password "password" and email "email"
-    And I login as "unknown" with password "unknown"
+    And I login as "demo" with password "password"
     And Exists a Request with description "primera request"
-    When I delete the previously created Request
+    When I login as "unknown" with password "unknown"
+    And I delete the previously created Request
     Then The response code is 401

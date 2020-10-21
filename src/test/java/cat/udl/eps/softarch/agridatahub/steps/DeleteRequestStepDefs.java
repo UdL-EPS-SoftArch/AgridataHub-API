@@ -33,20 +33,18 @@ public class DeleteRequestStepDefs {
     @And("Exists a Request with description {string}")
     public void existsARequestWithDescription(String description) throws Throwable {
 
-        List list = requestRepository.findRequestByDescription(description);
-        if(list.isEmpty()){
-            Date date = new Date();
-            Request request = new Request();
-            request.setCreationDate(date);
-            request.setDescription(description);
-            stepDefs.result = stepDefs.mockMvc.perform(
-                    post("/requests")
-                            .contentType(MediaType.APPLICATION_JSON_UTF8)
-                            .content(stepDefs.mapper.writeValueAsString(request))
-                            .accept(MediaType.APPLICATION_JSON)
-                            .with(AuthenticationStepDefs.authenticate()))
-                    .andDo(print());
-        }
+        Date date = new Date();
+        Request request = new Request();
+        request.setCreationDate(date);
+        request.setDescription(description);
+        stepDefs.result = stepDefs.mockMvc.perform(
+                post("/requests")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content(stepDefs.mapper.writeValueAsString(request))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+
     }
 
 
