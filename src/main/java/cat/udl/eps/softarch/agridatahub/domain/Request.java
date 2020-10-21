@@ -2,14 +2,17 @@ package cat.udl.eps.softarch.agridatahub.domain;
 
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table
 @Data
-public class Request {
+public class Request extends UriEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,6 +23,8 @@ public class Request {
 
     @Column(length = 500, unique = false)
     private String description;
-
-    //S'ha d'enllaçar amb una instancia de Reuser i DatasetRequest
+    /*
+    @ManyToOne(optional = false)
+    private Reuser requestedBy;
+    */
 }
