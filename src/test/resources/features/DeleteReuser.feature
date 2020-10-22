@@ -34,5 +34,5 @@ Feature: Delete Reuser
     Given There is a registered reuser with username "reuser" and password "password" and email "reus@gmail.com"
     And I login as "demo" with password "password"
     When I delete the reuser with username "reuser"
-    Then The response code is 500
+    Then The response code is 403
     And It has not been deleted a reuser with username "reuser"

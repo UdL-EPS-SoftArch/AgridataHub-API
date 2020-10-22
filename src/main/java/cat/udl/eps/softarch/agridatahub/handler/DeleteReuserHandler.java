@@ -23,7 +23,7 @@ public class DeleteReuserHandler {
 
         Reuser curr_reuser = ((Reuser)authentication.getPrincipal());
 
-        if (!curr_reuser.getId().equals(reuser.getId())){
+        if (curr_reuser.getId().equals(reuser.getId())){
             throw new ForbiddenException();
         }
     }
