@@ -3,7 +3,6 @@ package cat.udl.eps.softarch.agridatahub.steps;
 import cat.udl.eps.softarch.agridatahub.repository.DatasetRequestRepository;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.When;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.http.MediaType;
 
@@ -18,6 +17,8 @@ public class UpdateDatasetRequestStepDefs {
     final StepDefs stepDefs;
     final DatasetRequestRepository datasetRequestRepository;
 
+    public String id;
+
     UpdateDatasetRequestStepDefs(StepDefs stepDefs, DatasetRequestRepository datasetRequestRepository) {
         this.stepDefs = stepDefs;
         this.datasetRequestRepository = datasetRequestRepository;
@@ -25,7 +26,7 @@ public class UpdateDatasetRequestStepDefs {
 
     @When("I change the status value of DatasetRequest to {string}")
     public void iChangeTheStatusValueOfDatasetRequestA(String granted) throws Exception {
-        String id = stepDefs.result.andReturn().getResponse().getHeader("Location");
+        id = stepDefs.result.andReturn().getResponse().getHeader("Location");
         stepDefs.result = stepDefs.mockMvc.perform(
                 patch(id)
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -37,11 +38,10 @@ public class UpdateDatasetRequestStepDefs {
 
     @And("It has been updated the status value of DatasetRequest to {string}")
     public void itHasBeenUpdatedTheStatusValueOfDatasetRequestTo(String granted) throws Exception {
-        String id = stepDefs.result.andReturn().getResponse().getHeader("Location");
         stepDefs.result = stepDefs.mockMvc.perform(
                 get(id)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(jsonPath("$.granted", is(granted)));
+                .andExpect(jsonPath("$.granted", is(Boolean.parseBoolean(granted))));
     }
 }

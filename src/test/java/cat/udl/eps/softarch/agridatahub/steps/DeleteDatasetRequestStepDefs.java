@@ -3,9 +3,8 @@ package cat.udl.eps.softarch.agridatahub.steps;
 import cat.udl.eps.softarch.agridatahub.repository.DatasetRequestRepository;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.When;
-import org.junit.Assert;
+
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -16,6 +15,8 @@ public class DeleteDatasetRequestStepDefs {
     final StepDefs stepDefs;
     final DatasetRequestRepository datasetRequestRepository;
 
+    public String id;
+
     DeleteDatasetRequestStepDefs(StepDefs stepDefs, DatasetRequestRepository datasetRequestRepository) {
         this.stepDefs = stepDefs;
         this.datasetRequestRepository = datasetRequestRepository;
@@ -23,34 +24,23 @@ public class DeleteDatasetRequestStepDefs {
 
     @When("I delete a DatasetRequest")
     public void iDeleteTheDatasetRequestWithValue() throws Exception {
-        String id = stepDefs.result.andReturn().getResponse().getHeader("Location");
+        id = stepDefs.result.andReturn().getResponse().getHeader("Location");
         stepDefs.result = stepDefs.mockMvc.perform(
-                delete("/datasetRequests/{id}",id)
-                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                delete(id)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
+
     }
 
     @And("It does not exist the DatasetRequest.")
     public void itDoesNotExistTheDatasetRequest() throws Exception {
-        String id = stepDefs.result.andReturn().getResponse().getHeader("Location");
         stepDefs.result = stepDefs.mockMvc.perform(
                 get(id)
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print())
                 .andExpect(status().isNotFound());
-    }
-
-    @And("It has not deleted the DatasetRequest.")
-    public void itHasNotDeletedTheDatasetRequest() throws Exception {
-        String id = stepDefs.result.andReturn().getResponse().getHeader("Location");
-        stepDefs.result = stepDefs.mockMvc.perform(
-                get(id)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .with(AuthenticationStepDefs.authenticate()))
-                .andDo(print())
-                .andExpect(status().isOk());
     }
 }

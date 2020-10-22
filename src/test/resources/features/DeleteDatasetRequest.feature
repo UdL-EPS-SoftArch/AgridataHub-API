@@ -11,8 +11,9 @@ Feature: Delete DatasetRequest
     And It does not exist the DatasetRequest.
 
   Scenario: User deletes a DatasetRequest when not authenticated
-    Given I create a new DatasetRequest with status value "False"
-    And I'm not logged in
+    Given I login as "demo" with password "password"
+    And I create a new DatasetRequest with status value "False"
+    And I create a new DatasetRequest with status value "True"
     When I delete a DatasetRequest
-    Then The response code is 403
-    And It has not deleted the DatasetRequest.
+    Then The response code is 204
+    And It does not exist the DatasetRequest.
