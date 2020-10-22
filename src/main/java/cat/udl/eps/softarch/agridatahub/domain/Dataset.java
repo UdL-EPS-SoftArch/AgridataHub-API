@@ -1,6 +1,8 @@
 package cat.udl.eps.softarch.agridatahub.domain;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Entity;
@@ -12,17 +14,19 @@ import java.time.ZonedDateTime;
 
 @Entity
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class Dataset extends UriEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotBlank
+    @Length(min = 1, max = 80)
     private String title;
 
-    @NotBlank
+    @Length(max = 256)
     private String description;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private ZonedDateTime createdAt;
 }
