@@ -20,9 +20,4 @@ public interface RequestRepository extends PagingAndSortingRepository<Request, L
     List<Request> findRequestByCreationDate(@Param("creationDate") Date date);
     List<Request> findRequestByDescription(@Param("description") String description);
 
-    @Modifying
-    @Query("update Request r set r.description = ?1 where r.id = ?2")
-    void setRequestDescription(String description, Long id);
-    
-
 }
