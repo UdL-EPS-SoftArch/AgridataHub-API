@@ -21,8 +21,8 @@ public class DeleteRequestStepDefs {
 
     final StepDefs stepDefs;
     final RequestRepository requestRepository;
+    private Request requestGlobal;
 
-    private String newResourceUri;
 
     public DeleteRequestStepDefs(StepDefs stepDefs, RequestRepository requestRepository) {
         this.stepDefs = stepDefs;
@@ -31,20 +31,10 @@ public class DeleteRequestStepDefs {
     
 
     @And("Exists a Request with description {string}")
-    public void existsARequestWithDescription(String description) throws Throwable {
-
-        Date date = new Date();
+    public void existsARequestWithDescription(String description) {
         Request request = new Request();
-        request.setCreationDate(date);
         request.setDescription(description);
-        stepDefs.result = stepDefs.mockMvc.perform(
-                post("/requests")
-                        .contentType(MediaType.APPLICATION_JSON_UTF8)
-                        .content(stepDefs.mapper.writeValueAsString(request))
-                        .accept(MediaType.APPLICATION_JSON)
-                        .with(AuthenticationStepDefs.authenticate()))
-                .andDo(print());
-
+        requestGlobal = requestRepository.save(request);
     }
 
 
@@ -59,9 +49,8 @@ public class DeleteRequestStepDefs {
     @When("I delete the previously created Request")
     public void iDeleteThePreviouslyCreatedRequest() throws  Throwable {
 
-        newResourceUri = stepDefs.result.andReturn().getResponse().getHeader("Location");
         stepDefs.result = stepDefs.mockMvc.perform(
-                delete(newResourceUri)
+                delete(requestGlobal.getUri())
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))

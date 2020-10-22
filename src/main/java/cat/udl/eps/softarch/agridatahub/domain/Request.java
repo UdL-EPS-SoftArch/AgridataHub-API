@@ -3,6 +3,7 @@ package cat.udl.eps.softarch.agridatahub.domain;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -19,6 +20,7 @@ public class Request extends UriEntity<Long> {
     private Long id;
 
     @Temporal(TemporalType.DATE)
+    @CreatedDate
     private Date creationDate;
 
     @Column(length = 500, unique = false)
