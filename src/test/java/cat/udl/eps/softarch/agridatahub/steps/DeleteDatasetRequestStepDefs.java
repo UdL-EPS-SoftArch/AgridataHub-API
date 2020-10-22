@@ -3,9 +3,8 @@ package cat.udl.eps.softarch.agridatahub.steps;
 import cat.udl.eps.softarch.agridatahub.repository.DatasetRequestRepository;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.When;
-import org.junit.Assert;
+
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

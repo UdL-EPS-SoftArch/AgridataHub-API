@@ -1,7 +1,6 @@
 package cat.udl.eps.softarch.agridatahub.steps;
 
 import cat.udl.eps.softarch.agridatahub.repository.DatasetRequestRepository;
-import cat.udl.eps.softarch.agridatahub.repository.UserRepository;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.When;
 import org.springframework.http.MediaType;
