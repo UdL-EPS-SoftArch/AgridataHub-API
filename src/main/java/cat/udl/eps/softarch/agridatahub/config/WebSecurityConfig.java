@@ -34,6 +34,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PATCH, "/providers/*").hasRole("PROVIDER")
                 .antMatchers(HttpMethod.POST, "/providers").anonymous()
                 .antMatchers(HttpMethod.POST, "/datasets").hasRole("PROVIDER")
+                .antMatchers(HttpMethod.DELETE, "/datasets/*").hasRole("PROVIDER")
+                .antMatchers(HttpMethod.PATCH, "/datasets/*").hasRole("PROVIDER")
                 .antMatchers(HttpMethod.POST, "/**/*").authenticated()
                 .antMatchers(HttpMethod.PUT, "/**/*").authenticated()
                 .antMatchers(HttpMethod.PATCH, "/**/*").authenticated()
