@@ -77,8 +77,8 @@ public class RegisterProviderStepDefs {
     public void itHasNotBeenCreatedAProviderWithUsername(String username) throws Throwable {
         stepDefs.result = stepDefs.mockMvc.perform(
                 get("/providers/{username}", username)
-                            .accept(MediaType.APPLICATION_JSON)
-                            .with(AuthenticationStepDefs.authenticate()))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
                 .andExpect(status().isNotFound());
     }
 }
