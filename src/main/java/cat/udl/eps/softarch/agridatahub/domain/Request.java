@@ -2,24 +2,31 @@ package cat.udl.eps.softarch.agridatahub.domain;
 
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table
 @Data
-public class Request {
+public class Request extends UriEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Temporal(TemporalType.DATE)
+    @CreatedDate
     private Date creationDate;
 
     @Column(length = 500, unique = false)
     private String description;
-
-    //S'ha d'enllaçar amb una instancia de Reuser i DatasetRequest
+    /*
+    @ManyToOne(optional = false)
+    private Reuser requestedBy;
+    */
 }
