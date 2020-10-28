@@ -11,4 +11,5 @@ public interface DatasetRepository extends PagingAndSortingRepository<Dataset, L
     Dataset findDatasetByTitleAndDescription(@Param("title") String title, @Param("description") String description);
     List<Dataset> findByTitle(@Param("title") String title);
     List<Dataset> findByDescription(@Param("description") String description);
+    List<Dataset> findByTitleContainingOrDescriptionContaining(@Param("title") String title, @Param("decription") String description);
 }

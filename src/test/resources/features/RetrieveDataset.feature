@@ -57,3 +57,19 @@ Feature: Retrieve Dataset
     Given There is a created dataset with title "title" and description "description"
     When I request the dataset with title "title" and description "description"
     Then The response code is 401
+
+  Scenario: Reuser searches all datasets by text in title or description
+    Given There is a created dataset with title "title" and description "description"
+    And There is a registered reuser with username "reuser" and password "password" and email "reuser@gmail.com"
+    And I login as "reuser" with password "password"
+    When I search all the existing datasets in the app with text "title" in title or with text "pepìto" in description
+    Then The response code is 200
+
+  Scenario: Get only one dataset
+    Given There is a created dataset with title "title" and description "description"
+    And There is a created dataset with title "title2" and description "description2"
+    And There is a registered reuser with username "reuser" and password "password" and email "reuser@gmail.com"
+    And I login as "reuser" with password "password"
+    When I search all the existing datasets in the app with text "title" in title or with text "description" in description
+    Then The response code is 200
+    And There has been retrieved 1 datasets

@@ -7,6 +7,8 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import org.springframework.http.MediaType;
 
+import java.util.List;
+
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -59,4 +61,22 @@ public class RetrieveDatasetStepDefs {
         stepDefs.result.andExpect(jsonPath("$.title", is(title)))
                        .andExpect(jsonPath("$.description", is(description)));
     }
+
+    @When("I search all the existing datasets in the app with text {string} in title or with text {string} in description")
+    public void iSearchAllTheExistingDatasetsInTheAppWithTextInTitleOrWithTextInDescription(String title, String description) throws Exception {
+        // List<Dataset> datasets = datasetRepository.findByTitleContainingOrDescriptionContaining(text);
+        stepDefs.result = stepDefs.mockMvc.perform(
+                get("/datasets/search/findByTitleContainingOrDescriptionContaining?title={title}&description={description}", title, description)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+    }
+
+    @Given("There is a created dataset with text {string} in title {string} or description {string}")
+    public void thereIsACreatedDatasetWithTextInTitleOrDescription(String text) {
+        Dataset dataset = new Dataset();
+        dataset.setDescription(text);
+        datasetRepository.save(dataset);
+    }
+
 }
