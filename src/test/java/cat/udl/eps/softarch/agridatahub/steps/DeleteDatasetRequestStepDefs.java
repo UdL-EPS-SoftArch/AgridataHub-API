@@ -24,7 +24,6 @@ public class DeleteDatasetRequestStepDefs {
     final DatasetRepository datasetRepository;
     final RequestRepository requestRepository;
 
-    public static Long id;
     public static Date date;
     public static DatasetRequest datasetRequest;
 
@@ -38,10 +37,10 @@ public class DeleteDatasetRequestStepDefs {
 
     @When("I delete a DatasetRequest with status value {string} and associate request {string}")
     public void iDeleteADatasetRequestWithStatusValueAndAssociateRequest(String granted, String description) throws Exception {
-        datasetRequest = datasetRequestRepository.findByGrantedAndRequestedIn(Boolean.parseBoolean(granted),
+        datasetRequest = datasetRequestRepository.findByGrantedAndRequestedInEquals(Boolean.parseBoolean(granted),
                 requestRepository.findByCreationDateAndAndDescription(date,description));
         stepDefs.result = stepDefs.mockMvc.perform(
-                delete("/datasets/{id}", datasetRequest == null ? 0 : datasetRequest.getId())
+                delete("/datasetRequests/{id}", datasetRequest == null ? 0 : datasetRequest.getId())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
@@ -52,15 +51,17 @@ public class DeleteDatasetRequestStepDefs {
         datasetRequest = datasetRequestRepository.findByGrantedAndRequestOf(Boolean.parseBoolean(granted),
                 datasetRepository.findDatasetByTitleAndDescription(title,description));
         stepDefs.result = stepDefs.mockMvc.perform(
-                delete("/datasets/{id}", datasetRequest == null ? 0 : datasetRequest.getId())
+                delete("/datasetRequests/{id}", datasetRequest == null ? 0 : datasetRequest.getId())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
     }
 
-    @And("It does not exist the DatasetRequest.")
-    public void itDoesNotExistTheDatasetRequest() throws Exception {
+    @And("It does not exist the DatasetRequest with status value {string} and request {string}.")
+    public void itDoesNotExistTheDatasetRequestWithStatusValueAndRequest(String granted, String description) throws Exception {
+        datasetRequest = datasetRequestRepository.findByGrantedAndRequestedInEquals(Boolean.parseBoolean(granted),
+                requestRepository.findByCreationDateAndAndDescription(date,description));
         stepDefs.result = stepDefs.mockMvc.perform(
                 get("/datasetRequests/{id}",datasetRequest == null ? 0 : datasetRequest.getId())
                         .accept(MediaType.APPLICATION_JSON)
@@ -69,6 +70,15 @@ public class DeleteDatasetRequestStepDefs {
                 .andExpect(status().isNotFound());
     }
 
-
-
+    @And("It does not exist the DatasetRequest with status value {string} and dateset {string} and {string}.")
+    public void itDoesNotExistTheDatasetRequestWithStatusValueAndDatesetAnd(String granted, String title, String description) throws Exception {
+        datasetRequest = datasetRequestRepository.findByGrantedAndRequestOf(Boolean.parseBoolean(granted),
+                datasetRepository.findDatasetByTitleAndDescription(title,description));
+        stepDefs.result = stepDefs.mockMvc.perform(
+                delete("/datasets/{id}", datasetRequest == null ? 0 : datasetRequest.getId())
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+    }
 }

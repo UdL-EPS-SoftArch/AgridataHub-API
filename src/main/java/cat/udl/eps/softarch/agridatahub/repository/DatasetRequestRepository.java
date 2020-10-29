@@ -19,7 +19,7 @@ public interface DatasetRequestRepository extends PagingAndSortingRepository<Dat
      * https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.query-creation
      */
     DatasetRequest findByGrantedAndRequestOf(@Param("granted") Boolean granted, @Param("requestOf") Dataset requestOf);
-    DatasetRequest findByGrantedAndRequestedIn(@Param("granted") Boolean granted, @Param("requestedIn") Request requestedIn);
+    DatasetRequest findByGrantedAndRequestedInEquals(@Param("granted") Boolean granted, @Param("requestedIn") Request requestedIn);
     List<DatasetRequest> findByGranted(@Param("granted") Boolean granted);
     Optional<DatasetRequest> findById(@Param("id") Long id);
 }
