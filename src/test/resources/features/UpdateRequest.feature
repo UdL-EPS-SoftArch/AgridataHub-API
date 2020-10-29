@@ -19,6 +19,7 @@ Feature: Update Request
     Scenario: Update Request description of other reuser
       Given I login as "reuserDemo" with password "password"
       And Exists a created request with description "description"
+      And There is a registered reuser with username "reuser2" and password "password" and email "emailreuser@gmail.com"
       When I login as "reuser2" with password "password"
       And I change the description of the previous request to "new description"
       Then The response code is 403

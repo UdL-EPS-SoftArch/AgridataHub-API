@@ -9,6 +9,7 @@ Feature: Create Request
     When  I create a new request with description "primera request"
     Then The response code is 201
     And It has been created a new Request with description "primera request"
+    And It has been created a new Request by "reuserDemo"
 
   Scenario: Create a new Request without authentication
     Given I'm not logged in

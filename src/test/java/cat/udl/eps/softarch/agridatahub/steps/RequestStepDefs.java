@@ -2,9 +2,11 @@ package cat.udl.eps.softarch.agridatahub.steps;
 
 import cat.udl.eps.softarch.agridatahub.domain.Request;
 
+import cat.udl.eps.softarch.agridatahub.domain.Reuser;
 import cat.udl.eps.softarch.agridatahub.repository.RequestRepository;
 
 
+import cat.udl.eps.softarch.agridatahub.repository.ReuserRepository;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.When;
 
@@ -12,6 +14,7 @@ import org.junit.Assert;
 import org.springframework.http.MediaType;
 
 
+import java.util.List;
 
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -23,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class RequestStepDefs {
     final StepDefs stepDefs;
     final RequestRepository requestRepository;
+    private ReuserRepository reuserRepository;
     private String newResourceUri;
 
     RequestStepDefs(StepDefs stepDefs, RequestRepository requestRepository) {
@@ -69,5 +73,18 @@ public class RequestStepDefs {
     @And("I cannot create a request with description {string}")
     public void iCannotCreateARequestWithDescription(String descrip) {
         Assert.assertNull(newResourceUri);
+    }
+
+    @And("It has been created a new Request by {string}")
+    public void itHasBeenCreatedANewRequestBy(String reuser_username) throws Throwable {
+
+        stepDefs.result = stepDefs.mockMvc.perform(
+                get(newResourceUri + "/requestedBy")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$.id", is(reuser_username)));
+
     }
 }

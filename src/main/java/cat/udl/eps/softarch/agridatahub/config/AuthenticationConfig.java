@@ -48,13 +48,6 @@ public class AuthenticationConfig extends GlobalAuthenticationConfigurerAdapter 
       reuser.encodePassword();
       reuserRepository.save(reuser);
     }
-    if(!reuserRepository.existsById("reuser2")){
-      Reuser reuser = new Reuser();
-      reuser.setEmail("reuser2@agridata.hub");
-      reuser.setUsername("reuser2");
-      reuser.setPassword(defaultPassword);
-      reuser.encodePassword();
-      reuserRepository.save(reuser);
-    }
+
   }
 }

@@ -14,6 +14,7 @@ Feature: Delete Request
   Scenario: Delete Request of other reuser
     Given I login as "reuserDemo" with password "password"
     And I register a new request with description "descripcio"
+    And There is a registered reuser with username "reuser2" and password "password" and email "emailreuser@gmail.com"
     When I login as "reuser2" with password "password"
     And I delete the previously created Request
     Then The response code is 403
