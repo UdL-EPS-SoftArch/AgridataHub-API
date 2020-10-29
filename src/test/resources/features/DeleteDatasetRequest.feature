@@ -4,16 +4,21 @@ Feature: Delete DatasetRequest
   I want to delete my DatasetRequest
 
   Scenario: User deletes his/her own DatasetRequest
-    Given I login as "demo" with password "password"
-    And I create a new DatasetRequest with status value "False"
-    When I delete a DatasetRequest
+    Given There is a registered provider with username "provider" and password "password" and email "prov@gmail.com"
+    And I login as "provider" with password "password"
+    And I create a new dataset with title "title" and description "description"
+    And I create a new request with description "description"
+    And I create a new DatasetRequest associate with Dataset "title" and "description" and Request "description" with status value "True"
+    When I delete a DatasetRequest with status value "True" and associate request "description"
     Then The response code is 204
     And It does not exist the DatasetRequest.
 
-  Scenario: User deletes a DatasetRequest when not authenticated
-    Given I login as "demo" with password "password"
-    And I create a new DatasetRequest with status value "False"
-    And I create a new DatasetRequest with status value "True"
-    When I delete a DatasetRequest
+  Scenario: User deletes his/her own DatasetRequest
+    Given There is a registered provider with username "provider" and password "password" and email "prov@gmail.com"
+    And I login as "provider" with password "password"
+    And I create a new dataset with title "title" and description "description"
+    And I create a new request with description "description"
+    And I create a new DatasetRequest associate with Dataset "title" and "description" and Request "description" with status value "True"
+    When I delete a DatasetRequest with status value "True" and associate dataset "title" and "description"
     Then The response code is 204
     And It does not exist the DatasetRequest.
