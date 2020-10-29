@@ -18,7 +18,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UpdateRequestStepDefs {
     final StepDefs stepDefs;
     final RequestRepository requestRepository;
-    Request requestGlobal;
+
+    private String newResourceUri;
 
     UpdateRequestStepDefs(StepDefs stepDefs, RequestRepository requestRepository) {
         this.stepDefs = stepDefs;
@@ -30,7 +31,7 @@ public class UpdateRequestStepDefs {
     public void iChangeTheDescriptionOfThePreviousRequestTo(String description) throws Throwable {
 
         stepDefs.result = stepDefs.mockMvc.perform(
-                patch(requestGlobal.getUri())
+                patch(newResourceUri)
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content((new JSONObject().put("description", description)).toString())
                         .accept(MediaType.APPLICATION_JSON)
@@ -42,23 +43,31 @@ public class UpdateRequestStepDefs {
     public void itHasBeenUpdatedTheRequestDescriptionTo(String description) throws Throwable {
 
         stepDefs.result = stepDefs.mockMvc.perform(
-                get(requestGlobal.getUri())
+                get(newResourceUri)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(jsonPath("$.description", is(description)));
     }
 
     @And("Exists a created request with description {string}")
-    public void existsACreatedRequestWithDescription(String description) {
+    public void existsACreatedRequestWithDescription(String description) throws Throwable{
         Request request = new Request();
         request.setDescription(description);
-        requestGlobal = requestRepository.save(request);
+
+        stepDefs.result = stepDefs.mockMvc.perform(
+                post("/requests")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(stepDefs.mapper.writeValueAsString(request))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+        newResourceUri = stepDefs.result.andReturn().getResponse().getHeader("Location");
     }
 
     @When("I change the date of the previous request to current date")
     public void iChangeTheDateOfThePreviousRequestToCurrentDate() throws Throwable {
         stepDefs.result = stepDefs.mockMvc.perform(
-                patch(requestGlobal.getUri())
+                patch(newResourceUri)
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content((new JSONObject().put("creationDate", new Date())).toString())
                         .accept(MediaType.APPLICATION_JSON)

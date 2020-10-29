@@ -3,18 +3,17 @@ Feature: Delete Request
   As a user
   I want to delete a request
 
-  Scenario: User deletes an existing Request
-    Given There is a registered user with username "demo" and password "password" and email "email"
-    And I login as "demo" with password "password"
-    And Exists a Request with description "primera request"
+  Scenario: Reuser creator deletes Request
+    Given I login as "reuserDemo" with password "password"
+    And I register a new request with description "descripcio"
     When I delete the previously created Request
     Then The response code is 204
+    And It does not exist a request with description "descripcio"
 
 
-  Scenario: Delete Request when when not authenticated
-    Given There is a registered user with username "demo" and password "password" and email "email"
-    And I login as "demo" with password "password"
-    And Exists a Request with description "primera request"
-    When I login as "unknown" with password "unknown"
+  Scenario: Delete Request of other reuser
+    Given I login as "reuserDemo" with password "password"
+    And I register a new request with description "descripcio"
+    When I login as "reuser2" with password "password"
     And I delete the previously created Request
-    Then The response code is 401
+    Then The response code is 403
