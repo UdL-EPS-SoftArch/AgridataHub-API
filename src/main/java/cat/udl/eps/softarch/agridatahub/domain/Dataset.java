@@ -1,5 +1,6 @@
 package cat.udl.eps.softarch.agridatahub.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.Length;
@@ -26,6 +27,10 @@ public class Dataset extends UriEntity<Long> {
 
     @Length(max = 256)
     private String description;
+
+    @ManyToOne
+    @JsonIdentityReference(alwaysAsId = true)
+    private Provider providedBy;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private ZonedDateTime createdAt;
