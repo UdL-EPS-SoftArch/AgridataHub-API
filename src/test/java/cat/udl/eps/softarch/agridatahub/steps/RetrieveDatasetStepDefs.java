@@ -62,16 +62,6 @@ public class RetrieveDatasetStepDefs {
                        .andExpect(jsonPath("$.description", is(description)));
     }
 
-    @When("I search all the existing datasets in the app with text {string} in title or with text {string} in description")
-    public void iSearchAllTheExistingDatasetsInTheAppWithTextInTitleOrWithTextInDescription(String title, String description) throws Exception {
-        // List<Dataset> datasets = datasetRepository.findByTitleContainingOrDescriptionContaining(text);
-        stepDefs.result = stepDefs.mockMvc.perform(
-                get("/datasets/search/findByTitleContainingOrDescriptionContaining?title={title}&description={description}", title, description)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .with(AuthenticationStepDefs.authenticate()))
-                .andDo(print());
-    }
-
     @Given("There is a created dataset with text {string} in title {string} or description {string}")
     public void thereIsACreatedDatasetWithTextInTitleOrDescription(String text) {
         Dataset dataset = new Dataset();
@@ -79,4 +69,12 @@ public class RetrieveDatasetStepDefs {
         datasetRepository.save(dataset);
     }
 
+    @When("I search all the existing datasets in the app containing text {string} in title or containing text {string} in description")
+    public void iSearchAllTheExistingDatasetsInTheAppContainingTextInTitleOrContainingTextInDescription(String title, String description) throws Exception {
+        stepDefs.result = stepDefs.mockMvc.perform(
+                get("/datasets/search/findByTitleContainingOrDescriptionContaining?title={title}&description={description}", title, description)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+    }
 }

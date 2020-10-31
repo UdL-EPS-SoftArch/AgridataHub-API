@@ -62,14 +62,31 @@ Feature: Retrieve Dataset
     Given There is a created dataset with title "title" and description "description"
     And There is a registered reuser with username "reuser" and password "password" and email "reuser@gmail.com"
     And I login as "reuser" with password "password"
-    When I search all the existing datasets in the app with text "title" in title or with text "pepìto" in description
+    When I search all the existing datasets in the app containing text "title" in title or containing text "pepito" in description
     Then The response code is 200
 
-  Scenario: Get only one dataset
+  Scenario: Search datasets containing in title or description
     Given There is a created dataset with title "title" and description "description"
     And There is a created dataset with title "title2" and description "description2"
     And There is a registered reuser with username "reuser" and password "password" and email "reuser@gmail.com"
     And I login as "reuser" with password "password"
-    When I search all the existing datasets in the app with text "title" in title or with text "description" in description
+    When I search all the existing datasets in the app containing text "title" in title or containing text "description" in description
     Then The response code is 200
-    And There has been retrieved 1 datasets
+    And There has been retrieved 2 datasets
+
+  Scenario: Search a dataset that does not exist
+    Given There is a created dataset with title "title" and description "description"
+    And There is a created dataset with title "title2" and description "description2"
+    And There is a registered reuser with username "reuser" and password "password" and email "reuser@gmail.com"
+    And I login as "reuser" with password "password"
+    When I search all the existing datasets in the app containing text "robert" in title or containing text "munne" in description
+    Then The response code is 200
+    And There has been retrieved 0 datasets
+
+  Scenario: Search a dataset that does not exist
+    Given There is a registered reuser with username "reuser" and password "password" and email "reus@gmail.com"
+    And I login as "reuser" with password "password"
+    When I search all the existing datasets in the app containing text "TitleNotFound" in title or containing text "DescriptionNotFound" in description
+    Then The response code is 200
+    And There has been retrieved 0 datasets
+
