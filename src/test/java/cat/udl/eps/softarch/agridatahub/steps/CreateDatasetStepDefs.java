@@ -4,6 +4,7 @@ import cat.udl.eps.softarch.agridatahub.domain.Dataset;
 import cat.udl.eps.softarch.agridatahub.repository.DatasetRepository;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.When;
+import org.json.JSONObject;
 import org.junit.Assert;
 import org.springframework.http.MediaType;
 
@@ -38,8 +39,8 @@ public class CreateDatasetStepDefs {
                 .andDo(print());
     }
 
-    @And("It has been created a dataset with title {string} and description {string}")
-    public void itHasBeenCreatedADatasetWithTitleAndDescription(String title, String description) throws Throwable {
+    @And("It has been created a dataset with title {string} and description {string} and is provided by {string}")
+    public void itHasBeenCreatedADatasetWithTitleAndDescriptionAndIsProvidedBy(String title, String description, String username) throws Throwable {
         newResourceUri = stepDefs.result.andReturn().getResponse().getHeader("Location");
         stepDefs.result = stepDefs.mockMvc.perform(
                 get(newResourceUri)
@@ -48,6 +49,19 @@ public class CreateDatasetStepDefs {
                 .andDo(print())
                 .andExpect(jsonPath("$.title", is(title)))
                 .andExpect(jsonPath("$.description", is(description)));
+
+        JSONObject response = new JSONObject(stepDefs.result.andReturn().getResponse().getContentAsString());
+        String providedByHref = response.getJSONObject("_links").getJSONObject("providedBy").getString("href");
+
+        assertProvidedByEqualsToExpectedUser(providedByHref, username);
+    }
+
+    public void assertProvidedByEqualsToExpectedUser(String providedByHref, String expectedUsername) throws Throwable{
+        stepDefs.mockMvc.perform(
+                get(providedByHref)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(jsonPath("$.id", is(expectedUsername)));
     }
 
     @And("It has not been created any dataset")
