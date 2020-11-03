@@ -19,6 +19,8 @@ public class RetrieveRequestStepDefs {
     final StepDefs stepDefs;
     final RequestRepository requestRepository;
 
+    String newResourceUri;
+
     public RetrieveRequestStepDefs(StepDefs stepDefs, RequestRepository requestRepository) {
         this.stepDefs = stepDefs;
         this.requestRepository = requestRepository;
@@ -27,11 +29,17 @@ public class RetrieveRequestStepDefs {
 
     @Given("There exists a created request with description {string}")
     public void thereExistsACreatedRequestWithDescription(String descrip) throws Throwable {
-        Date date = new Date();
         Request request = new Request();
-        request.setCreationDate(date);
         request.setDescription(descrip);
-        requestRepository.save(request);
+
+        stepDefs.result = stepDefs.mockMvc.perform(
+                post("/requests")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(stepDefs.mapper.writeValueAsString(request))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+        newResourceUri = stepDefs.result.andReturn().getResponse().getHeader("Location");
     }
 
     @When("I list all the existing requests in the app")
