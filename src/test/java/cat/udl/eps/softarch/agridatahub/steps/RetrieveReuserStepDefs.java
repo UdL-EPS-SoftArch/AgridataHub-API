@@ -31,7 +31,7 @@ public class RetrieveReuserStepDefs {
 
     @And("There has been retrieved {int} reusers")
     public void thereHasBeenRetrievedReusers(int numReusers) throws Throwable {
-        stepDefs.result.andExpect(jsonPath("$._embedded.reusers", hasSize(numReusers)));
+        stepDefs.result.andExpect(jsonPath("$._embedded.reusers", hasSize(numReusers+1)));
     }
 
     @When("I request the reuser with username {string}")

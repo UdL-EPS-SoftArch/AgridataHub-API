@@ -30,7 +30,7 @@ public class RegisterReuserStepDefs {
     public void thereIsNoRegisteredReuserWithUsername(String username) {
         Assert.assertTrue("Reuser \""
                         +  username + "\"shouldn't exist",
-                reuserRepository.findByUsernameContaining(username).isEmpty());
+                reuserRepository.findById(username).isEmpty());
     }
 
     @When("^I register a new reuser with username \"([^\"]*)\", email \"([^\"]*)\" and password \"([^\"]*)\"$")
@@ -65,7 +65,7 @@ public class RegisterReuserStepDefs {
 
     @Given("There is a registered reuser with username {string} and password {string} and email {string}")
     public void thereIsARegisteredReuserWithUsernameAndPasswordAndEmail(String username, String password, String email) {
-        if (reuserRepository.findByUsernameContaining(username).isEmpty()) {
+        if (reuserRepository.findById(username).isEmpty()) {
             Reuser reuser = new Reuser();
             reuser.setEmail(email);
             reuser.setUsername(username);

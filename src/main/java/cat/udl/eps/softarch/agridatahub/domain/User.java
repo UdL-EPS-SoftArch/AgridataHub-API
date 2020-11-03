@@ -53,6 +53,7 @@ public class User extends UriEntity<String> implements UserDetails {
 
     public void setId(String id) { this.username = id; }
 
+
     @Override
     public boolean isAccountNonExpired() {
         return true;

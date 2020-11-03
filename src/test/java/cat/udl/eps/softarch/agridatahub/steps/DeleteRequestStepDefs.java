@@ -21,23 +21,28 @@ public class DeleteRequestStepDefs {
 
     final StepDefs stepDefs;
     final RequestRepository requestRepository;
-    private Request requestGlobal;
+    private String newResourceUri;
 
 
     public DeleteRequestStepDefs(StepDefs stepDefs, RequestRepository requestRepository) {
         this.stepDefs = stepDefs;
         this.requestRepository = requestRepository;
     }
-    
 
-    @And("Exists a Request with description {string}")
-    public void existsARequestWithDescription(String description) {
+    @And("I register a new request with description {string}")
+    public void iRegisterANewRequestWithDescription(String description) throws Throwable {
+
         Request request = new Request();
         request.setDescription(description);
-        requestGlobal = requestRepository.save(request);
+        stepDefs.result = stepDefs.mockMvc.perform(
+                post("/requests")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(stepDefs.mapper.writeValueAsString(request))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+        newResourceUri = stepDefs.result.andReturn().getResponse().getHeader("Location");
     }
-
-
 
     @And("It does not exist a request with description {string}")
     public void itDoesNotExistARequestWithDescription(String descrip) {
@@ -48,16 +53,13 @@ public class DeleteRequestStepDefs {
 
     @When("I delete the previously created Request")
     public void iDeleteThePreviouslyCreatedRequest() throws  Throwable {
-
         stepDefs.result = stepDefs.mockMvc.perform(
-                delete(requestGlobal.getUri())
+                delete(newResourceUri)
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
     }
 
-    @When("I delete a request")
-    public void iDeleteARequest() {
-    }
+
 }
