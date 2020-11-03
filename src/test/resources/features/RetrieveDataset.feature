@@ -91,3 +91,14 @@ Feature: Retrieve Dataset
     Then The response code is 200
     And There has been retrieved 0 datasets
 
+  Scenario: Provider lists own datasets
+    Given There is a registered provider with username "providerA" and password "password" and email "provA@gmail.com"
+    And There is a registered provider with username "providerB" and password "password" and email "provB@gmail.com"
+    And I login as "providerA" with password "password"
+    And I create a new dataset with title "titleA" and description "descriptionA"
+    And I login as "providerB" with password "password"
+    And I create a new dataset with title "titleB1" and description "descriptionB1"
+    And I create a new dataset with title "titleB2" and description "descriptionB2"
+    When I list all my datasets
+    Then The response code is 200
+    And There has been retrieved 2 datasets

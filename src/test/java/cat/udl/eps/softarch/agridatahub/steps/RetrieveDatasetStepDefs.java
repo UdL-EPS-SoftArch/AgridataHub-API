@@ -7,8 +7,6 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import org.springframework.http.MediaType;
 
-import java.util.List;
-
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -73,6 +71,16 @@ public class RetrieveDatasetStepDefs {
     public void iSearchAllTheExistingDatasetsInTheAppContainingTextInTitleOrContainingTextInDescription(String title, String description) throws Exception {
         stepDefs.result = stepDefs.mockMvc.perform(
                 get("/datasets/search/findByTitleContainingOrDescriptionContaining?title={title}&description={description}", title, description)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+    }
+
+    @When("I list all my datasets")
+    public void iListAllMyDatasets() throws Throwable {
+        String currUsername = AuthenticationStepDefs.currentUsername;
+        stepDefs.result = stepDefs.mockMvc.perform(
+                get("/datasets/search/findByProvidedBy?provider=/providers/"+currUsername)
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
