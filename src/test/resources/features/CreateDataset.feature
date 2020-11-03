@@ -8,14 +8,14 @@ Feature: Create Dataset
     And I login as "provider" with password "password"
     When I create a new dataset with title "title" and description "description"
     Then The response code is 201
-    And It has been created a dataset with title "title" and description "description"
+    And It has been created a dataset with title "title" and description "description" and is provided by "provider"
 
   Scenario: Create new dataset with empty description
     Given There is a registered provider with username "provider" and password "password" and email "prov@gmail.com"
     And I login as "provider" with password "password"
     When I create a new dataset with title "title" and description ""
     Then The response code is 201
-    And It has been created a dataset with title "title" and description ""
+    And It has been created a dataset with title "title" and description "" and is provided by "provider"
 
   Scenario: Create new dataset with empty title
     Given There is a registered provider with username "provider" and password "password" and email "prov@gmail.com"
