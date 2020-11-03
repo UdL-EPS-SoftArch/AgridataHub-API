@@ -25,7 +25,7 @@ public class DatasetRequestEventHandler {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         logger.info("Username: {}", authentication.getAuthorities());
 
-        datasetRequest.setRequestOf((Dataset)authentication.getPrincipal());
+        datasetRequest.getRequestOf().setProvidedBy((Provider)authentication.getPrincipal());
     }
 
     @HandleBeforeDelete
@@ -36,7 +36,7 @@ public class DatasetRequestEventHandler {
 
         Provider curr_provider = ((Provider)authentication.getPrincipal());
 
-        if (!curr_provider.getId().equals(datasetRequest.getRequestOf().getId())) {
+        if (!curr_provider.getId().equals(datasetRequest.getRequestOf().getProvidedBy().getId())) {
             throw new ForbiddenException();
         }
     }
@@ -49,7 +49,7 @@ public class DatasetRequestEventHandler {
 
         Provider curr_provider = ((Provider)authentication.getPrincipal());
 
-        if (!curr_provider.getId().equals(datasetRequest.getRequestOf().getId())) {
+        if (!curr_provider.getId().equals(datasetRequest.getRequestOf().getProvidedBy().getId())) {
             throw new ForbiddenException();
         }
     }
