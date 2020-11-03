@@ -59,4 +59,14 @@ public class RetrieveDatasetStepDefs {
         stepDefs.result.andExpect(jsonPath("$.title", is(title)))
                        .andExpect(jsonPath("$.description", is(description)));
     }
+
+    @When("I list all my datasets")
+    public void iListAllMyDatasets() throws Throwable {
+        String currUsername = AuthenticationStepDefs.currentUsername;
+        stepDefs.result = stepDefs.mockMvc.perform(
+                get("/datasets/search/findByProvidedBy?provider=/providers/"+currUsername)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+    }
 }
