@@ -59,4 +59,30 @@ public class RetrieveDatasetStepDefs {
         stepDefs.result.andExpect(jsonPath("$.title", is(title)))
                        .andExpect(jsonPath("$.description", is(description)));
     }
+
+    @Given("There is a created dataset with text {string} in title {string} or description {string}")
+    public void thereIsACreatedDatasetWithTextInTitleOrDescription(String text) {
+        Dataset dataset = new Dataset();
+        dataset.setDescription(text);
+        datasetRepository.save(dataset);
+    }
+
+    @When("I search all the existing datasets in the app containing text {string} in title or containing text {string} in description")
+    public void iSearchAllTheExistingDatasetsInTheAppContainingTextInTitleOrContainingTextInDescription(String title, String description) throws Exception {
+        stepDefs.result = stepDefs.mockMvc.perform(
+                get("/datasets/search/findByTitleContainingOrDescriptionContaining?title={title}&description={description}", title, description)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+    }
+
+    @When("I list all my datasets")
+    public void iListAllMyDatasets() throws Throwable {
+        String currUsername = AuthenticationStepDefs.currentUsername;
+        stepDefs.result = stepDefs.mockMvc.perform(
+                get("/datasets/search/findByProvidedBy?provider=/providers/"+currUsername)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+    }
 }
