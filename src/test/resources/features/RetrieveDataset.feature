@@ -63,6 +63,7 @@ Feature: Retrieve Dataset
     And There is a registered reuser with username "reuser" and password "password" and email "reuser@gmail.com"
     And I login as "reuser" with password "password"
     When I search all the existing datasets in the app containing text "title" in title or containing text "pepito" in description
+    And There has been retrieved 1 datasets
     Then The response code is 200
 
   Scenario: Search datasets containing in title or description
