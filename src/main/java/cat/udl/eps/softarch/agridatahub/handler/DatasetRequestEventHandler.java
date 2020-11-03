@@ -21,7 +21,7 @@ public class DatasetRequestEventHandler {
 
     @HandleBeforeCreate
     public void handleDatasetPreCreate(DatasetRequest datasetRequest) {
-        logger.info("Before delete: {}", datasetRequest.toString());
+        logger.info("Before create: {}", datasetRequest.toString());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         logger.info("Username: {}", authentication.getAuthorities());
 
@@ -43,7 +43,7 @@ public class DatasetRequestEventHandler {
 
     @HandleBeforeSave
     public void handleDatasetPreUpdate(DatasetRequest datasetRequest) {
-        logger.info("Before delete: {}", datasetRequest.toString());
+        logger.info("Before update: {}", datasetRequest.toString());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         logger.info("Username: {}", authentication.getAuthorities());
 
