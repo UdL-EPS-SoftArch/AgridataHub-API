@@ -44,8 +44,6 @@ public class Dataset extends UriEntity<Long> {
     private String content;
 
     @NotNull
-    @Column(length = textSize)
-    @Size(max = textSize)
     private String contentType;
 
 
