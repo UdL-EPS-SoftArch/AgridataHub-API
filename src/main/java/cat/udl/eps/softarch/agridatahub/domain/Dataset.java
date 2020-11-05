@@ -38,13 +38,10 @@ public class Dataset extends UriEntity<Long> {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private ZonedDateTime createdAt;
 
-    @NotNull
     @Column(length = textSize)
     @Size(max = textSize)
     private String content;
 
-    @NotNull
     private String contentType;
-
 
 }
