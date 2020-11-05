@@ -1,7 +1,6 @@
 package cat.udl.eps.softarch.agridatahub.repository;
 
 import cat.udl.eps.softarch.agridatahub.domain.DatasetRequest;
-import cat.udl.eps.softarch.agridatahub.domain.User;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
@@ -17,5 +16,5 @@ public interface DatasetRequestRepository extends PagingAndSortingRepository<Dat
      * https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.query-creation
      */
 
-    List<DatasetRequest> findDatasetRequestById(@Param("id") Long id);
+    DatasetRequest findDatasetRequestById(@Param("id") Long id);
 }
