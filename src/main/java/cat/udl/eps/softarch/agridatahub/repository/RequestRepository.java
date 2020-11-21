@@ -16,6 +16,7 @@ import java.util.Optional;
 @RepositoryRestResource
 public interface RequestRepository extends PagingAndSortingRepository<Request, Long> {
 
+    Request findByCreationDateAndAndDescription(@Param("creationDate") Date date, @Param("description") String description);
     Optional<Request> findById(Long id);
     List<Request> findRequestByCreationDate(@Param("creationDate") Date date);
     List<Request> findRequestByDescription(@Param("description") String description);
