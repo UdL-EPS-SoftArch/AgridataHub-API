@@ -32,28 +32,4 @@ public class GrantDatasetAccessStepDefs {
         this.datasetRequestRepository = datasetRequestRepository;
     }
 
-    @And("It has been granted access to DatasetRequest with id {int}")
-    public void itHasBeenGrantedAccessToDatasetRequestWithId(Long id) throws Exception {
-        DatasetRequest datasetRequest = datasetRequestRepository.findDatasetRequestById(id);
-        if (datasetRequest != null)
-            datasetRequest.setGranted(true);
-        assert datasetRequest != null;
-        stepDefs.result = stepDefs.mockMvc.perform(
-                patch("/datasetRequests/{id}", datasetRequest.getId())
-                        .contentType(MediaType.APPLICATION_JSON_UTF8)
-                        .content((new JSONObject().put("granted", datasetRequest.isGranted())).toString())
-                        .accept(MediaType.APPLICATION_JSON)
-                        .with(AuthenticationStepDefs.authenticate())
-        ).andDo(print());
-
-
-    }
-
-
-    @And("there is created a DatasetRequest with id {int}")
-    public void thereIsCreatedADatasetRequestWithId(int arg0) {
-
-    }
-
-
 }
