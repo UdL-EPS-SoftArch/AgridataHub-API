@@ -32,7 +32,6 @@ public interface RequestRepository extends CrudRepository<Request, Long> {
 
     List<Request> findRequestByCreationDate(@Param("creationDate") Date date);
 
-    @PreAuthorize("#requestedBy == authentication.name")
     List<Request> findRequestByDescription(@Param("description") String description);
 
 }
