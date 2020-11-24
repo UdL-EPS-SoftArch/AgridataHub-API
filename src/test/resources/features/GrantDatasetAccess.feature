@@ -5,12 +5,13 @@ Feature: Grant Dataset Access
 
 
   Scenario: Change DatasetRequest value
-    Given There is a created DatasetRequest associate with Dataset "title1" and "description1" and Request "description1" with status value "False"
-    And There is a registered provider with username "provider" and password "password" and email "prov@gmail.com"
+    Given There is a registered provider with username "provider" and password "password" and email "prov@gmail.com"
     And I login as "provider" with password "password"
+    And There exists a created request with description "description1"
+    And There is a created DatasetRequest associate with Dataset "title1" and "description1" and Request "description1" with status value "True"
+    And I create a new dataset with title "title1" and description "description1"
     When I change the status value of DatasetRequest associate with Dataset "title1" and "description1" and "False" to "True"
     Then The response code is 200
-
 
   Scenario: Provider tries to change DatasetRequest
     Given There is a created DatasetRequest associate with Dataset "title1" and "description1" and Request "description1" with status value "True"
