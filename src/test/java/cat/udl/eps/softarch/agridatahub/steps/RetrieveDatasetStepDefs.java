@@ -7,8 +7,9 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import org.springframework.http.MediaType;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import java.util.Optional;
+
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -81,6 +82,24 @@ public class RetrieveDatasetStepDefs {
         String currUsername = AuthenticationStepDefs.currentUsername;
         stepDefs.result = stepDefs.mockMvc.perform(
                 get("/datasets/search/findByProvidedBy?provider=/providers/"+currUsername)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+    }
+
+    @And("The content and content type have not been returned")
+    public void theContentAndContentTypeHaveNotBeenReturned() throws Throwable {
+        stepDefs.result.andExpect(jsonPath("$.content").doesNotExist())
+                       .andExpect(jsonPath("$.content", not(nullValue())))
+                       .andExpect(jsonPath("$.contentType").doesNotExist())
+                       .andExpect(jsonPath("$.contentType", not(nullValue())));
+    }
+
+    @When("I request the dataset with id {string}")
+    public void iRequestTheDatasetWithId(String id) throws Throwable {
+        Optional<Dataset> dataset = datasetRepository.findById(Long.parseLong(id));
+        stepDefs.result = stepDefs.mockMvc.perform(
+                get("/datasets/{id}", !dataset.isPresent() ? 0 : dataset.get().getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());

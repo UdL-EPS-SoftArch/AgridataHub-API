@@ -102,3 +102,19 @@ Feature: Retrieve Dataset
     When I list all my datasets
     Then The response code is 200
     And There has been retrieved 2 datasets
+
+  Scenario: Provider gets a dataset that owns
+    Given There is a registered provider with username "providerA" and password "password" and email "provA@gmail.com"
+    And I login as "providerA" with password "password"
+    And I create a new dataset with title "titleA" and description "descriptionA"
+    When I request the dataset with id "1"
+    Then The response code is 200
+
+  Scenario: Provider gets a dataset that does not own
+    Given There is a registered provider with username "providerA" and password "password" and email "provA@gmail.com"
+    And There is a registered provider with username "providerB" and password "password" and email "provB@gmail.com"
+    And I login as "providerA" with password "password"
+    And I create a new dataset with title "titleA" and description "descriptionA"
+    And I login as "providerB" with password "password"
+    When I request the dataset with id "1"
+    Then The response code is 200
