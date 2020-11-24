@@ -87,4 +87,31 @@ public class RequestStepDefs {
                 .andExpect(jsonPath("$.id", is(reuser_username)));
 
     }
+
+    @And("I create a request with description {string}")
+    public void iCreateARequestWithDescription(String descrip) throws  Throwable{
+        Request request = new Request();
+        request.setDescription(descrip);
+
+        stepDefs.result = stepDefs.mockMvc.perform(
+                post("/requests")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(stepDefs.mapper.writeValueAsString(request))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+        newResourceUri = stepDefs.result.andReturn().getResponse().getHeader("Location");
+    }
+
+    @And("I retrieve a Request by {string}")
+    public void iRetrieveARequestBy(String username) throws Throwable {
+        stepDefs.result = stepDefs.mockMvc.perform(
+                get(newResourceUri + "/requestedBy")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$.id", is(username)));
+
+    }
 }

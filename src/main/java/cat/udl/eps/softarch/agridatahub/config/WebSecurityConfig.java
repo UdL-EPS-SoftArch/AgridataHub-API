@@ -40,6 +40,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT, "/**/*").authenticated()
                 .antMatchers(HttpMethod.PATCH, "/**/*").authenticated()
                 .antMatchers(HttpMethod.DELETE, "/**/*").authenticated()
+                .antMatchers(HttpMethod.GET, "/requests").hasRole("REUSER")
 
                 .anyRequest().permitAll()
                 .and()
