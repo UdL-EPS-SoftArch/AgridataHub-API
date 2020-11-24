@@ -9,4 +9,5 @@ import java.util.List;
 public interface ProviderRepository extends PagingAndSortingRepository<Provider, String> {
 
     List<Provider> findByUsernameContaining(@Param("text") String text);
+    Provider findByUsernameAndPassword(@Param("username") String username,@Param("password") String password);
 }
