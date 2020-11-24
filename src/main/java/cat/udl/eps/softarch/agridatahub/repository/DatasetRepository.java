@@ -20,6 +20,6 @@ public interface DatasetRepository extends PagingAndSortingRepository<Dataset, L
                                                                @Param("description") String description);
     List<Dataset> findByProvidedBy(@Param("provider") Provider provider);
 
-    @PostAuthorize("returnObject.providedBy.username == authentication.name")
+    @PostAuthorize("!returnObject.isPresent() || returnObject.get().providedBy.username == authentication.name")
     Optional<Dataset> findById(@Param("id") Long id);
 }

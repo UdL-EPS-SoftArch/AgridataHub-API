@@ -41,21 +41,18 @@ Feature: Retrieve Dataset
     When I list all the existing datasets in the app
     Then The response code is 401
 
-  Scenario: Get an existing dataset
-    Given There is a created dataset with title "title" and description "description"
-    And I login as "demo" with password "password"
-    When I request the dataset with title "title" and description "description"
-    Then The response code is 200
-    And It has been received the dataset with title "title" and description "description"
-
   Scenario: Get a non existing dataset
-    Given I login as "demo" with password "password"
-    When I request the dataset with title "title" and description "description"
+    Given There is a registered provider with username "providerA" and password "password" and email "provA@gmail.com"
+    And I login as "providerA" with password "password"
+    When I request the dataset with id "99"
     Then The response code is 404
 
   Scenario: Get an existing dataset when not authenticated
-    Given There is a created dataset with title "title" and description "description"
-    When I request the dataset with title "title" and description "description"
+    Given There is a registered provider with username "providerA" and password "password" and email "provA@gmail.com"
+    And I login as "providerA" with password "password"
+    And I create a new dataset with title "title" and description "description"
+    And I'm not logged in
+    When I request the dataset with id "1"
     Then The response code is 401
 
   Scenario: Reuser searches all datasets by text in title or description
@@ -117,4 +114,4 @@ Feature: Retrieve Dataset
     And I create a new dataset with title "titleA" and description "descriptionA"
     And I login as "providerB" with password "password"
     When I request the dataset with id "1"
-    Then The response code is 200
+    Then The response code is 403

@@ -7,8 +7,6 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import org.springframework.http.MediaType;
 
-import java.util.Optional;
-
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -45,29 +43,6 @@ public class RetrieveDatasetStepDefs {
         stepDefs.result.andExpect(jsonPath("$._embedded.datasets", hasSize(numDatasets)));
     }
 
-    @When("I request the dataset with title {string} and description {string}")
-    public void iRequestTheDatasetWithTitleAndDescription(String title, String description) throws Throwable {
-        Dataset dataset = datasetRepository.findDatasetByTitleAndDescription(title, description);
-        stepDefs.result = stepDefs.mockMvc.perform(
-                get("/datasets/{id}", dataset == null ? 0 : dataset.getId())
-                    .accept(MediaType.APPLICATION_JSON)
-                    .with(AuthenticationStepDefs.authenticate()))
-                .andDo(print());
-    }
-
-    @And("It has been received the dataset with title {string} and description {string}")
-    public void itHasBeenReceivedTheDatasetWithTitleAndDescription(String title, String description) throws Throwable {
-        stepDefs.result.andExpect(jsonPath("$.title", is(title)))
-                       .andExpect(jsonPath("$.description", is(description)));
-    }
-
-    @Given("There is a created dataset with text {string} in title {string} or description {string}")
-    public void thereIsACreatedDatasetWithTextInTitleOrDescription(String text) {
-        Dataset dataset = new Dataset();
-        dataset.setDescription(text);
-        datasetRepository.save(dataset);
-    }
-
     @When("I search all the existing datasets in the app containing text {string} in title or containing text {string} in description")
     public void iSearchAllTheExistingDatasetsInTheAppContainingTextInTitleOrContainingTextInDescription(String title, String description) throws Exception {
         stepDefs.result = stepDefs.mockMvc.perform(
@@ -87,19 +62,10 @@ public class RetrieveDatasetStepDefs {
                 .andDo(print());
     }
 
-    @And("The content and content type have not been returned")
-    public void theContentAndContentTypeHaveNotBeenReturned() throws Throwable {
-        stepDefs.result.andExpect(jsonPath("$.content").doesNotExist())
-                       .andExpect(jsonPath("$.content", not(nullValue())))
-                       .andExpect(jsonPath("$.contentType").doesNotExist())
-                       .andExpect(jsonPath("$.contentType", not(nullValue())));
-    }
-
     @When("I request the dataset with id {string}")
     public void iRequestTheDatasetWithId(String id) throws Throwable {
-        Optional<Dataset> dataset = datasetRepository.findById(Long.parseLong(id));
         stepDefs.result = stepDefs.mockMvc.perform(
-                get("/datasets/{id}", !dataset.isPresent() ? 0 : dataset.get().getId())
+                get("/datasets/"+ id)
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
