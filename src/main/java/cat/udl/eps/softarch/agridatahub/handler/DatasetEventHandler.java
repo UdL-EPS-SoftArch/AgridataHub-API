@@ -13,6 +13,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+
 @Component
 @RepositoryEventHandler
 public class DatasetEventHandler {
@@ -25,6 +28,11 @@ public class DatasetEventHandler {
         logger.info("Username: {}", authentication.getAuthorities());
 
         dataset.setProvidedBy((Provider)authentication.getPrincipal());
+
+        ZonedDateTime createdAt = ZonedDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm:ss z");
+        String createdAtFormatted = createdAt.format(formatter);
+        dataset.setCreatedAt(ZonedDateTime.parse(createdAtFormatted, formatter));
     }
 
     @HandleBeforeDelete

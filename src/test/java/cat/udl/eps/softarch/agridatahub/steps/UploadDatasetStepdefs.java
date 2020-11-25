@@ -6,25 +6,21 @@ import cat.udl.eps.softarch.agridatahub.repository.ProviderRepository;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.hamcrest.Matchers;
-import org.json.JSONObject;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 
-public class UploudDatasetStepdefs {
+public class UploadDatasetStepdefs {
     final StepDefs stepDefs;
     final DatasetRepository datasetRepository;
     final ProviderRepository providerRepository;
@@ -33,7 +29,7 @@ public class UploudDatasetStepdefs {
     public static String newResourceUri;
     public static Dataset datasetFile;
 
-    public UploudDatasetStepdefs(StepDefs stepDefs, DatasetRepository datasetRepository, ProviderRepository providerRepository, WebApplicationContext wac) {
+    public UploadDatasetStepdefs(StepDefs stepDefs, DatasetRepository datasetRepository, ProviderRepository providerRepository, WebApplicationContext wac) {
         this.stepDefs = stepDefs;
         this.datasetRepository = datasetRepository;
         this.providerRepository = providerRepository;
@@ -65,7 +61,8 @@ public class UploudDatasetStepdefs {
     public void theDatasetContainsAFileWithFilename(String title) throws Exception {
         stepDefs.result = stepDefs.mockMvc.perform(
                 get("/datasets/{id}", datasetFile == null ? 0 : datasetFile.getId())
-                        .accept(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print())
                 .andExpect(jsonPath("$.title").value(title));
     }
@@ -75,7 +72,8 @@ public class UploudDatasetStepdefs {
     public void theDatasetContentContainsContent(String title) throws Exception {
         stepDefs.result = stepDefs.mockMvc.perform(
                 get("/datasets/{id}", datasetFile == null ? 0 : datasetFile.getId())
-                        .accept(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print())
                 .andExpect(jsonPath("$.title", is(title)))
                 .andExpect(jsonPath("$.content").value(datasetFile.getContent()));
