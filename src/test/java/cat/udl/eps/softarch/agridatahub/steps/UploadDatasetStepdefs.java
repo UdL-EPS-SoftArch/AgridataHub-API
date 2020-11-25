@@ -65,7 +65,8 @@ public class UploudDatasetStepdefs {
     public void theDatasetContainsAFileWithFilename(String title) throws Exception {
         stepDefs.result = stepDefs.mockMvc.perform(
                 get("/datasets/{id}", datasetFile == null ? 0 : datasetFile.getId())
-                        .accept(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print())
                 .andExpect(jsonPath("$.title").value(title));
     }
@@ -75,7 +76,8 @@ public class UploudDatasetStepdefs {
     public void theDatasetContentContainsContent(String title) throws Exception {
         stepDefs.result = stepDefs.mockMvc.perform(
                 get("/datasets/{id}", datasetFile == null ? 0 : datasetFile.getId())
-                        .accept(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print())
                 .andExpect(jsonPath("$.title", is(title)))
                 .andExpect(jsonPath("$.content").value(datasetFile.getContent()));
