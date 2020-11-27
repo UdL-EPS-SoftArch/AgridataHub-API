@@ -13,17 +13,18 @@ Feature: Grant Dataset Access
     And I create a new request with description "description1"
     And There is a registered provider with username "provider" and password "password" and email "prov@gmail.com"
     And I login as "provider" with password "password"
-    And I create a new DatasetRequest associate with Dataset "title1" and "description1" and Request "description1" with status value "True"
+    And I create a new DatasetRequest associate with Dataset "title1" and "description1" and Request "description1" with status value "False"
     And It has been created a new DatasetRequest
-    When I change the status value of DatasetRequest associate with Dataset "title1" and "description1" and "True" to "False"
+    When I change the status value of DatasetRequest associate with Dataset "title1" and "description1" and "False" to "True"
     Then The response code is 200
+    And It has been updated the status value of DatasetRequest to "True"
 
 
-  Scenario: Provider tries to change DatasetRequest
-    Given There is a created DatasetRequest associate with Dataset "title1" and "description1" and Request "description1" with status value "True"
-    And There is a registered provider with username "provider" and password "password" and email "prov@gmail.com"
-    And I login as "provider2" with password "password"
-    When I change the status value of DatasetRequest associate with Dataset "title1" and "description1" and "True" to "False"
+  Scenario: Provider not authenticated tries to change DatasetRequest
+    Given There is a registered provider with username "provider" and password "password" and email "prov@gmail.com"
+    And There is a created dataset with title "title1" and description "description1"
+    And There is a created DatasetRequest associate with Dataset "title1" and "description1" and Request "description1" with status value "False"
+    When I change the status value of DatasetRequest associate with Dataset "title1" and "description1" and "False" to "True"
     Then The response code is 401
 
 
