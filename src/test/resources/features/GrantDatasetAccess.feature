@@ -28,5 +28,22 @@ Feature: Grant Dataset Access
     Then The response code is 401
 
 
+  Scenario: reuser tries to change DatasetRequest value
+    Given There is a registered provider with username "provider" and password "password" and email "prov@gmail.com"
+    And There is a created dataset with title "title1" and description "description1"
+    And There is a created DatasetRequest associate with Dataset "title1" and "description1" and Request "description1" with status value "False"
+    And I login as "reuser" with password "passwd"
+    When I change the status value of DatasetRequest associate with Dataset "title1" and "description1" and "False" to "True"
+    Then The response code is 401
+
+  Scenario: provider tries to change DatasetRequest value
+    Given There is a registered provider with username "provider" and password "password" and email "prov1@gmail.com"
+    And There is a created dataset with title "title1" and description "description1"
+    And There is a created DatasetRequest associate with Dataset "title1" and "description1" and Request "description1" with status value "False"
+    And I login as "provider1" with password "password1"
+    When I change the status value of DatasetRequest associate with Dataset "title1" and "description1" and "False" to "True"
+    Then The response code is 401
+
+
 
 
