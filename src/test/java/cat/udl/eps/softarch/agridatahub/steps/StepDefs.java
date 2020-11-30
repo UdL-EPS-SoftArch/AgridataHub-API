@@ -7,6 +7,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import cat.udl.eps.softarch.agridatahub.AgridatahubApplication;
+import cat.udl.eps.softarch.agridatahub.domain.DatasetRequest;
+import cat.udl.eps.softarch.agridatahub.domain.Provider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.cucumber.java.Before;
@@ -40,6 +42,7 @@ public class StepDefs {
     protected MockMvc mockMvc;
     protected ResultActions result;
     protected ObjectMapper mapper = new ObjectMapper();
+    protected DatasetRequest datasetRequest;
 
     StepDefs(WebApplicationContext wac) {
         this.wac = wac;
