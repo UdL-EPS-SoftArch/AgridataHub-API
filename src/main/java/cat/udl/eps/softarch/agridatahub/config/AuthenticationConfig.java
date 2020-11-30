@@ -1,6 +1,7 @@
 package cat.udl.eps.softarch.agridatahub.config;
 
 import cat.udl.eps.softarch.agridatahub.domain.*;
+import cat.udl.eps.softarch.agridatahub.repository.ProviderRepository;
 import cat.udl.eps.softarch.agridatahub.repository.ReuserRepository;
 import cat.udl.eps.softarch.agridatahub.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,12 +18,14 @@ public class AuthenticationConfig extends GlobalAuthenticationConfigurerAdapter 
   final BasicUserDetailsService basicUserDetailsService;
   final UserRepository userRepository;
   final ReuserRepository reuserRepository;
+  final ProviderRepository providerRepository;
 
-  public AuthenticationConfig(BasicUserDetailsService basicUserDetailsService, UserRepository userRepository, ReuserRepository reuserRepository) {
+  public AuthenticationConfig(BasicUserDetailsService basicUserDetailsService, UserRepository userRepository, ReuserRepository reuserRepository, ProviderRepository providerRepository) {
 
     this.basicUserDetailsService = basicUserDetailsService;
     this.userRepository = userRepository;
     this.reuserRepository = reuserRepository;
+    this.providerRepository = providerRepository;
   }
 
   @Override
@@ -47,6 +50,15 @@ public class AuthenticationConfig extends GlobalAuthenticationConfigurerAdapter 
       reuser.setPassword(defaultPassword);
       reuser.encodePassword();
       reuserRepository.save(reuser);
+    }
+
+    if(!providerRepository.existsById("reuserDemo")){
+      Provider provider = new Provider();
+      provider.setEmail("providerDemo@agridata.hub");
+      provider.setUsername("providerDemo");
+      provider.setPassword(defaultPassword);
+      provider.encodePassword();
+      providerRepository.save(provider);
     }
 
   }
