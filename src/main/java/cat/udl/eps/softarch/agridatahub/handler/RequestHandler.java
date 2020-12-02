@@ -27,7 +27,11 @@ public class RequestHandler {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         logger.info("Reuser: {}", authentication.getAuthorities());
 
-        request.setRequestedBy((Reuser)authentication.getPrincipal());
+        try {
+            request.setRequestedBy((Reuser)authentication.getPrincipal());
+        } catch (Exception ex){
+            throw new ForbiddenException();
+        }
     }
 
     @HandleBeforeDelete
