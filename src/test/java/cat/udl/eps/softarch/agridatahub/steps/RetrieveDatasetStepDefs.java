@@ -7,8 +7,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import org.springframework.http.MediaType;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -44,29 +43,6 @@ public class RetrieveDatasetStepDefs {
         stepDefs.result.andExpect(jsonPath("$._embedded.datasets", hasSize(numDatasets)));
     }
 
-    @When("I request the dataset with title {string} and description {string}")
-    public void iRequestTheDatasetWithTitleAndDescription(String title, String description) throws Throwable {
-        Dataset dataset = datasetRepository.findDatasetByTitleAndDescription(title, description);
-        stepDefs.result = stepDefs.mockMvc.perform(
-                get("/datasets/{id}", dataset == null ? 0 : dataset.getId())
-                    .accept(MediaType.APPLICATION_JSON)
-                    .with(AuthenticationStepDefs.authenticate()))
-                .andDo(print());
-    }
-
-    @And("It has been received the dataset with title {string} and description {string}")
-    public void itHasBeenReceivedTheDatasetWithTitleAndDescription(String title, String description) throws Throwable {
-        stepDefs.result.andExpect(jsonPath("$.title", is(title)))
-                       .andExpect(jsonPath("$.description", is(description)));
-    }
-
-    @Given("There is a created dataset with text {string} in title {string} or description {string}")
-    public void thereIsACreatedDatasetWithTextInTitleOrDescription(String text) {
-        Dataset dataset = new Dataset();
-        dataset.setDescription(text);
-        datasetRepository.save(dataset);
-    }
-
     @When("I search all the existing datasets in the app containing text {string} in title or containing text {string} in description")
     public void iSearchAllTheExistingDatasetsInTheAppContainingTextInTitleOrContainingTextInDescription(String title, String description) throws Exception {
         stepDefs.result = stepDefs.mockMvc.perform(
@@ -81,6 +57,15 @@ public class RetrieveDatasetStepDefs {
         String currUsername = AuthenticationStepDefs.currentUsername;
         stepDefs.result = stepDefs.mockMvc.perform(
                 get("/datasets/search/findByProvidedBy?provider=/providers/"+currUsername)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+    }
+
+    @When("I request the dataset with id {string}")
+    public void iRequestTheDatasetWithId(String id) throws Throwable {
+        stepDefs.result = stepDefs.mockMvc.perform(
+                get("/datasets/"+ id)
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
