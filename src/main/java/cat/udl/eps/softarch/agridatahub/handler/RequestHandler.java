@@ -14,6 +14,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
 @Component
 @RepositoryEventHandler
 public class RequestHandler {
@@ -26,7 +30,8 @@ public class RequestHandler {
         logger.info("Before creating: {}", request.toString());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         logger.info("Reuser: {}", authentication.getAuthorities());
-
+        Date createdAt = new Date();
+        request.setCreationDate(createdAt);
         try {
             request.setRequestedBy((Reuser)authentication.getPrincipal());
         } catch (Exception ex){
