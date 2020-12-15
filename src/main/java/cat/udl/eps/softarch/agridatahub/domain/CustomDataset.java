@@ -8,6 +8,7 @@ import java.time.ZonedDateTime;
     name = "customDataset",
     types = {Dataset.class})
 public interface CustomDataset {
+    Long getId();
     String getTitle();
     String getDescription();
     Provider getProvidedBy();
