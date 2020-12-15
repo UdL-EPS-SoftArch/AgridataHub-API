@@ -1,6 +1,8 @@
 # AgridataHub-API
 
-[![Build Status](https://travis-ci.org/UdL-EPS-SoftArch/AgridataHub-API.svg?branch=master)](https://travis-ci.org/UdL-EPS-SoftArch/AgridataHub-API/branches) 
+[![Build Status](https://github.com/UdL-EPS-SoftArch/AgridataHub-API/workflows/CI%20with%20Maven%20and%20CD%20with%20Heroku%20and%20Docker/badge.svg)](https://github.com/UdL-EPS-SoftArch/AgridataHub-API/actions?query=workflow%3A%22CI+with+Maven+and+CD+with+Heroku+and+Docker%22) 
+
+
 
 ## Vision
 

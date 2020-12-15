@@ -1,0 +1,7 @@
+allowed-origins: http://localhost:4200
+default-password: password
+
+spring.datasource.url: jdbc:h2:file:./h2
+spring.datasource.driver-class-name: org.h2.Driver
+spring.jpa.hibernate.ddl-auto: update
+
