@@ -1,7 +1,9 @@
 package cat.udl.eps.softarch.agridatahub.steps;
 
 import cat.udl.eps.softarch.agridatahub.domain.Dataset;
+import cat.udl.eps.softarch.agridatahub.domain.Provider;
 import cat.udl.eps.softarch.agridatahub.repository.DatasetRepository;
+import cat.udl.eps.softarch.agridatahub.repository.ProviderRepository;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
@@ -15,10 +17,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class RetrieveDatasetStepDefs {
     final StepDefs stepDefs;
     final DatasetRepository datasetRepository;
+    final ProviderRepository providerRepository;
 
-    public RetrieveDatasetStepDefs(StepDefs stepDefs, DatasetRepository datasetRepository) {
+    public RetrieveDatasetStepDefs(StepDefs stepDefs, DatasetRepository datasetRepository, ProviderRepository providerRepository) {
         this.stepDefs = stepDefs;
         this.datasetRepository = datasetRepository;
+        this.providerRepository = providerRepository;
     }
 
     @Given("There is a created dataset with title {string} and description {string}")
@@ -69,5 +73,14 @@ public class RetrieveDatasetStepDefs {
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
+    }
+
+    @Given("There is a created dataset with title {string} and description {string} and provided by {string}")
+    public void thereIsACreatedDatasetWithTitleAndDescriptionAndProvidedBy(String title, String description, String username) {
+        Dataset dataset = new Dataset();
+        dataset.setTitle(title);
+        dataset.setDescription(description);
+        dataset.setProvidedBy(providerRepository.findById(username).get());
+        datasetRepository.save(dataset);
     }
 }

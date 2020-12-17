@@ -4,16 +4,16 @@ Feature: Retrieve Dataset
   I want to list all the datasets or see the details of one
 
   Scenario: User lists all datasets
-    Given There is a created dataset with title "title1" and description "description1"
-    And There is a created dataset with title "title2" and description "description2"
+    Given There is a created dataset with title "title1" and description "description1" and provided by "providerDemo"
+    And There is a created dataset with title "title2" and description "description2" and provided by "providerDemo"
     And I login as "demo" with password "password"
     When I list all the existing datasets in the app
     Then The response code is 200
     And There has been retrieved 2 datasets
     
   Scenario: Provider lists all datasets
-    Given There is a created dataset with title "title1" and description "description1"
-    And There is a created dataset with title "title2" and description "description2"
+    Given There is a created dataset with title "title1" and description "description1" and provided by "providerDemo"
+    And There is a created dataset with title "title2" and description "description2" and provided by "providerDemo"
     And There is a registered provider with username "provider" and password "password" and email "prov@gmail.com"
     And I login as "provider" with password "password"
     When I list all the existing datasets in the app
@@ -21,8 +21,8 @@ Feature: Retrieve Dataset
     And There has been retrieved 2 datasets
     
   Scenario: Reuser lists all datasets
-    Given There is a created dataset with title "title1" and description "description1"
-    And There is a created dataset with title "title2" and description "description2"
+    Given There is a created dataset with title "title1" and description "description1" and provided by "providerDemo"
+    And There is a created dataset with title "title2" and description "description2" and provided by "providerDemo"
     And There is a registered reuser with username "reuser" and password "password" and email "reuser@gmail.com"
     And I login as "reuser" with password "password"
     When I list all the existing datasets in the app
@@ -36,8 +36,8 @@ Feature: Retrieve Dataset
     And There has been retrieved 0 datasets
 
   Scenario: List all datasets when not authenticated
-    Given There is a created dataset with title "title1" and description "description1"
-    And There is a created dataset with title "title2" and description "description2"
+    Given There is a created dataset with title "title1" and description "description1" and provided by "providerDemo"
+    And There is a created dataset with title "title2" and description "description2" and provided by "providerDemo"
     When I list all the existing datasets in the app
     Then The response code is 401
 
@@ -56,7 +56,7 @@ Feature: Retrieve Dataset
     Then The response code is 401
 
   Scenario: Reuser searches all datasets by text in title or description
-    Given There is a created dataset with title "title" and description "description"
+    Given There is a created dataset with title "title" and description "description" and provided by "providerDemo"
     And There is a registered reuser with username "reuser" and password "password" and email "reuser@gmail.com"
     And I login as "reuser" with password "password"
     When I search all the existing datasets in the app containing text "title" in title or containing text "pepito" in description
@@ -64,8 +64,8 @@ Feature: Retrieve Dataset
     Then The response code is 200
 
   Scenario: Search datasets containing in title or description
-    Given There is a created dataset with title "title" and description "description"
-    And There is a created dataset with title "title2" and description "description2"
+    Given There is a created dataset with title "title" and description "description" and provided by "providerDemo"
+    And There is a created dataset with title "title2" and description "description2" and provided by "providerDemo"
     And There is a registered reuser with username "reuser" and password "password" and email "reuser@gmail.com"
     And I login as "reuser" with password "password"
     When I search all the existing datasets in the app containing text "title" in title or containing text "description" in description
@@ -73,8 +73,8 @@ Feature: Retrieve Dataset
     And There has been retrieved 2 datasets
 
   Scenario: Search a dataset that does not exist
-    Given There is a created dataset with title "title" and description "description"
-    And There is a created dataset with title "title2" and description "description2"
+    Given There is a created dataset with title "title" and description "description" and provided by "providerDemo"
+    And There is a created dataset with title "title2" and description "description2" and provided by "providerDemo"
     And There is a registered reuser with username "reuser" and password "password" and email "reuser@gmail.com"
     And I login as "reuser" with password "password"
     When I search all the existing datasets in the app containing text "robert" in title or containing text "munne" in description
