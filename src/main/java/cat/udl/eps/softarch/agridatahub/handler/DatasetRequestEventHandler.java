@@ -25,7 +25,7 @@ public class DatasetRequestEventHandler {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         logger.info("Username: {}", authentication.getAuthorities());
 
-        datasetRequest.getRequestOf().setProvidedBy((Provider)authentication.getPrincipal());
+        //datasetRequest.getRequestOf().setProvidedBy((Provider)authentication.getPrincipal());
     }
 
     @HandleBeforeDelete
