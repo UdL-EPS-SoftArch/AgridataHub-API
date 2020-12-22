@@ -1,14 +1,15 @@
 package cat.udl.eps.softarch.agridatahub.steps;
 
 import cat.udl.eps.softarch.agridatahub.domain.Dataset;
+import cat.udl.eps.softarch.agridatahub.domain.Provider;
 import cat.udl.eps.softarch.agridatahub.repository.DatasetRepository;
+import cat.udl.eps.softarch.agridatahub.repository.ProviderRepository;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import org.springframework.http.MediaType;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -16,10 +17,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class RetrieveDatasetStepDefs {
     final StepDefs stepDefs;
     final DatasetRepository datasetRepository;
+    final ProviderRepository providerRepository;
 
-    public RetrieveDatasetStepDefs(StepDefs stepDefs, DatasetRepository datasetRepository) {
+    public RetrieveDatasetStepDefs(StepDefs stepDefs, DatasetRepository datasetRepository, ProviderRepository providerRepository) {
         this.stepDefs = stepDefs;
         this.datasetRepository = datasetRepository;
+        this.providerRepository = providerRepository;
     }
 
     @Given("There is a created dataset with title {string} and description {string}")
@@ -44,29 +47,6 @@ public class RetrieveDatasetStepDefs {
         stepDefs.result.andExpect(jsonPath("$._embedded.datasets", hasSize(numDatasets)));
     }
 
-    @When("I request the dataset with title {string} and description {string}")
-    public void iRequestTheDatasetWithTitleAndDescription(String title, String description) throws Throwable {
-        Dataset dataset = datasetRepository.findDatasetByTitleAndDescription(title, description);
-        stepDefs.result = stepDefs.mockMvc.perform(
-                get("/datasets/{id}", dataset == null ? 0 : dataset.getId())
-                    .accept(MediaType.APPLICATION_JSON)
-                    .with(AuthenticationStepDefs.authenticate()))
-                .andDo(print());
-    }
-
-    @And("It has been received the dataset with title {string} and description {string}")
-    public void itHasBeenReceivedTheDatasetWithTitleAndDescription(String title, String description) throws Throwable {
-        stepDefs.result.andExpect(jsonPath("$.title", is(title)))
-                       .andExpect(jsonPath("$.description", is(description)));
-    }
-
-    @Given("There is a created dataset with text {string} in title {string} or description {string}")
-    public void thereIsACreatedDatasetWithTextInTitleOrDescription(String text) {
-        Dataset dataset = new Dataset();
-        dataset.setDescription(text);
-        datasetRepository.save(dataset);
-    }
-
     @When("I search all the existing datasets in the app containing text {string} in title or containing text {string} in description")
     public void iSearchAllTheExistingDatasetsInTheAppContainingTextInTitleOrContainingTextInDescription(String title, String description) throws Exception {
         stepDefs.result = stepDefs.mockMvc.perform(
@@ -84,5 +64,23 @@ public class RetrieveDatasetStepDefs {
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
+    }
+
+    @When("I request the dataset with id {string}")
+    public void iRequestTheDatasetWithId(String id) throws Throwable {
+        stepDefs.result = stepDefs.mockMvc.perform(
+                get("/datasets/"+ id)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+    }
+
+    @Given("There is a created dataset with title {string} and description {string} and provided by {string}")
+    public void thereIsACreatedDatasetWithTitleAndDescriptionAndProvidedBy(String title, String description, String username) {
+        Dataset dataset = new Dataset();
+        dataset.setTitle(title);
+        dataset.setDescription(description);
+        dataset.setProvidedBy(providerRepository.findById(username).get());
+        datasetRepository.save(dataset);
     }
 }

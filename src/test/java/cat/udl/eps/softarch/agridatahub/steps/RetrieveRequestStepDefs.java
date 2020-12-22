@@ -10,10 +10,12 @@ import org.springframework.http.MediaType;
 import java.util.Date;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class RetrieveRequestStepDefs {
     final StepDefs stepDefs;
@@ -55,4 +57,18 @@ public class RetrieveRequestStepDefs {
     public void thereHasBeenRetrievedRequests(int numRequests) throws Throwable {
         stepDefs.result.andExpect(jsonPath("$._embedded.requests", hasSize(numRequests)));
     }
+
+    @And("It has been retrieved a Request by {string}")
+    public void itHasBeenRetrievedARequestBy(String username) throws Throwable {
+        stepDefs.result = stepDefs.mockMvc.perform(
+                get(newResourceUri + "/requestedBy")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$.id", is(username)));
+
+    }
+
+
 }

@@ -13,6 +13,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+
 @Component
 @RepositoryEventHandler
 public class DatasetEventHandler {
@@ -20,11 +23,16 @@ public class DatasetEventHandler {
 
     @HandleBeforeCreate
     public void handleDatasetPreCreate(Dataset dataset) {
-        logger.info("Before delete: {}", dataset.toString());
+        logger.info("Before create: {}", dataset.toString());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         logger.info("Username: {}", authentication.getAuthorities());
 
         dataset.setProvidedBy((Provider)authentication.getPrincipal());
+
+        ZonedDateTime createdAt = ZonedDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm:ss z");
+        String createdAtFormatted = createdAt.format(formatter);
+        dataset.setCreatedAt(ZonedDateTime.parse(createdAtFormatted, formatter));
     }
 
     @HandleBeforeDelete
@@ -42,7 +50,7 @@ public class DatasetEventHandler {
 
     @HandleBeforeSave
     public void handleDatasetPreUpdate(Dataset dataset) {
-        logger.info("Before delete: {}", dataset.toString());
+        logger.info("Before update: {}", dataset.toString());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         logger.info("Username: {}", authentication.getAuthorities());
 

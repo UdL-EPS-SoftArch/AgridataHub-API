@@ -9,13 +9,13 @@ Feature: Retrieve Provider
     And I login as "demo" with password "password"
     When I list all the existing providers in the app
     Then The response code is 200
-    And There has been retrieved 2 providers
+    And There has been retrieved 3 providers
 
   Scenario: List empty providers list
     Given I login as "demo" with password "password"
     When I list all the existing providers in the app
     Then The response code is 200
-    And There has been retrieved 0 providers
+    And There has been retrieved 1 providers
     
   Scenario: List providers list when not authenticated
     Given There is a registered provider with username "provider" and password "password" and email "prov@gmail.com"

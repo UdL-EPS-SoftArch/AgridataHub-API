@@ -9,6 +9,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.Entity;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import java.time.ZonedDateTime;
 
@@ -17,6 +19,7 @@ import java.time.ZonedDateTime;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class Dataset extends UriEntity<Long> {
+    private final static int textSize = 16 * 1024;// 16KB
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -34,4 +37,11 @@ public class Dataset extends UriEntity<Long> {
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private ZonedDateTime createdAt;
+
+    @Column(length = textSize)
+    @Size(max = textSize)
+    private String content;
+
+    private String contentType;
+
 }

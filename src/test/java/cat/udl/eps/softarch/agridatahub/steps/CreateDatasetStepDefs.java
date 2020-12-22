@@ -59,7 +59,8 @@ public class CreateDatasetStepDefs {
     public void assertProvidedByEqualsToExpectedUser(String providedByHref, String expectedUsername) throws Throwable{
         stepDefs.mockMvc.perform(
                 get(providedByHref)
-                        .accept(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print())
                 .andExpect(jsonPath("$.id", is(expectedUsername)));
     }

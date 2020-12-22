@@ -78,6 +78,6 @@ public class User extends UriEntity<String> implements UserDetails {
     @JsonValue(value = false)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return AuthorityUtils.commaSeparatedStringToAuthorityList("USER_PLAYER");
+        return AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER");
     }
 }
