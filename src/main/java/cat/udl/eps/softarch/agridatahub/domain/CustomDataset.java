@@ -15,4 +15,5 @@ public interface CustomDataset {
     @Value("#{target.providedBy.username}")
     String getProvidedBy();
     ZonedDateTime getCreatedAt();
+    String getUri();
 }
