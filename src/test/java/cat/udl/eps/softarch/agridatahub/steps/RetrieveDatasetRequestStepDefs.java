@@ -13,8 +13,6 @@ import java.util.Date;
 
 import static org.hamcrest.Matchers.hasSize;
 
-import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -57,5 +55,14 @@ public class RetrieveDatasetRequestStepDefs {
     @And("There has been retrieved {int} DatasetRequest")
     public void thereHasBeenRetrievedDatasetRequest(int numDatasetRequest) throws Throwable {
         stepDefs.result.andExpect(jsonPath("$._embedded.datasetRequests", hasSize(numDatasetRequest)));
+    }
+
+    @When("I list all DatasetRequests of my own Datasets")
+    public void iListAllDatasetRequestsOfMyOwnDatasets() throws Throwable {
+        stepDefs.result = stepDefs.mockMvc.perform(
+                get("/datasetRequests")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
     }
 }
