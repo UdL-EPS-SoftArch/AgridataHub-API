@@ -1,7 +1,6 @@
 package cat.udl.eps.softarch.agridatahub.steps;
 
 import cat.udl.eps.softarch.agridatahub.domain.Dataset;
-import cat.udl.eps.softarch.agridatahub.domain.Provider;
 import cat.udl.eps.softarch.agridatahub.repository.DatasetRepository;
 import cat.udl.eps.softarch.agridatahub.repository.ProviderRepository;
 import io.cucumber.java.en.And;
