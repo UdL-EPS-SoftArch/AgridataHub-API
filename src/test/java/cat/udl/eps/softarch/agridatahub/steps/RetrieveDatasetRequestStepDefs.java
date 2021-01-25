@@ -57,7 +57,7 @@ public class RetrieveDatasetRequestStepDefs {
         stepDefs.result.andExpect(jsonPath("$._embedded.datasetRequests", hasSize(numDatasetRequest)));
     }
 
-    @When("I list all DatasetRequests of my own Datasets")
+    @When("I list all my own DatasetRequests")
     public void iListAllDatasetRequestsOfMyOwnDatasets() throws Throwable {
         stepDefs.result = stepDefs.mockMvc.perform(
                 get("/datasetRequests")

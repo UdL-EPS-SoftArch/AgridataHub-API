@@ -1,6 +1,6 @@
 Feature: Retrieve DatasetRequests of own Datasets
   In order to accept or decline DatasetRequests
-  As a Provider or Reuser
+  As a Provider
   I want to be able to see the DatasetRequests of my Datasets
 
   Background:
@@ -20,25 +20,19 @@ Feature: Retrieve DatasetRequests of own Datasets
 
   Scenario: List DatasetRequests of own datasets as provider1
     Given I login as "provider1" with password "password"
-    When I list all DatasetRequests of my own Datasets
+    When I list all my own DatasetRequests
     Then The response code is 200
     And There has been retrieved 2 DatasetRequest
 
   Scenario: List DatasetRequests of own datasets as provider2
     Given I login as "provider2" with password "password"
-    When I list all DatasetRequests of my own Datasets
+    When I list all my own DatasetRequests
     Then The response code is 200
     And There has been retrieved 1 DatasetRequest
 
   Scenario: List empty list of DatasetRequests of own datasets as provider3
     Given There is a registered provider with username "provider3" and password "password" and email "prov3@gmail.com"
     And I login as "provider3" with password "password"
-    When I list all DatasetRequests of my own Datasets
+    When I list all my own DatasetRequests
     Then The response code is 200
     And There has been retrieved 0 DatasetRequest
-
-  Scenario: List DatasetRequests of own requests as reuser
-    Given I login as "reuser" with password "password"
-    When I list all DatasetRequests of my own Datasets
-    Then The response code is 200
-    And There has been retrieved 3 DatasetRequest
